@@ -1,43 +1,6 @@
 import { CanvasTexture, SRGBColorSpace } from "three";
 import type { Flavor } from "@/data/flavors";
-function citrus(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  r: number,
-  color: string,
-) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(-0.3);
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, r, r * 1.2, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#fff7cc";
-  ctx.beginPath();
-  ctx.ellipse(0, 0, r * 0.88, r * 1.06, 0, 0, Math.PI * 2);
-  ctx.fill();
-  for (let i = 0; i < 9; i++) {
-    ctx.save();
-    ctx.scale(1, 1.2);
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.arc(
-      0,
-      0,
-      r * 0.79,
-      (i * Math.PI * 2) / 9 + 0.045,
-      ((i + 1) * Math.PI * 2) / 9 - 0.045,
-    );
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.restore();
-  }
-  ctx.restore();
-}
-export function makeLabel(flavor: Flavor) {
+export function makeLabel(flavor: Flavor, fruitImage: HTMLImageElement) {
   const canvas = document.createElement("canvas");
   canvas.width = 2048;
   canvas.height = 2048;
@@ -48,6 +11,7 @@ export function makeLabel(flavor: Flavor) {
     const x = side * 1024;
     c.save();
     c.translate(x, 0);
+    c.beginPath(); c.rect(0, 0, 1024, 2048); c.clip();
     c.fillStyle = flavor.secondaryColor;
     c.beginPath();
     c.moveTo(820, 0);
@@ -55,20 +19,13 @@ export function makeLabel(flavor: Flavor) {
     c.lineTo(1100, 2048);
     c.lineTo(1100, 0);
     c.fill();
-    c.globalAlpha = 0.18;
-    c.fillStyle = "#fff";
-    for (let n = 0; n < 22; n++) {
-      c.beginPath();
-      c.arc(
-        (n * 173) % 1024,
-        (n * 239) % 2048,
-        15 + (n % 4) * 16,
-        0,
-        Math.PI * 2,
-      );
-      c.fill();
-    }
-    c.globalAlpha = 1;
+    const cellSize = fruitImage.width / 3;
+    const fruitCell = { strawberry: 0, orange: 2, cherry: 3, watermelon: 4, grape: 5, lime: 6 }[flavor.fruitType];
+    const drawFruit = (cell: number, xx: number, yy: number, width: number, height: number) => {
+      c.drawImage(fruitImage, (cell % 3) * cellSize + 1, Math.floor(cell / 3) * cellSize + 1, cellSize - 2, cellSize - 2, xx, yy, width, height);
+    };
+    drawFruit(fruitCell, 15, 160, 330, 380);
+    drawFruit(flavor.fruitType === "strawberry" ? 1 : fruitCell, 650, 1020, 640, 740);
     c.fillStyle = "#fff8e9";
     c.font = "bold 35px Arial";
     c.textAlign = "center";
@@ -91,65 +48,6 @@ export function makeLabel(flavor: Flavor) {
     c.fillText("REAL FRUIT. FEEL-GOOD FIZZ.", 155, 1755);
     c.font = "30px Arial";
     c.fillText("12 FL OZ (355 mL)", 155, 1920);
-    if (["strawberry", "orange", "lime"].includes(flavor.fruitType))
-      citrus(
-        c,
-        855,
-        1410,
-        220,
-        flavor.fruitType === "orange"
-          ? "#ffb22c"
-          : flavor.fruitType === "lime"
-            ? "#b5d947"
-            : "#ffdc37",
-      );
-    else {
-      c.fillStyle = flavor.accentColor;
-      c.beginPath();
-      c.arc(830, 1270, 220, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = flavor.primaryColor;
-      c.font = "bold 65px Arial";
-      c.textAlign = "center";
-      c.fillText("GOOD", 830, 1250);
-      c.fillText("MOOD", 830, 1325);
-    }
-    if (flavor.fruitType === "strawberry") {
-      c.save();
-      c.translate(220, 300);
-      c.rotate(0.2);
-      c.fillStyle = "#b71335";
-      c.beginPath();
-      c.moveTo(-100, -50);
-      c.bezierCurveTo(-190, 40, -30, 260, 10, 270);
-      c.bezierCurveTo(80, 260, 205, 30, 110, -45);
-      c.bezierCurveTo(60, -85, -50, -85, -100, -50);
-      c.fill();
-      c.fillStyle = "#ffe198";
-      for (let n = 0; n < 22; n++) {
-        c.beginPath();
-        c.ellipse(
-          -80 + ((n * 43) % 175),
-          -10 + Math.floor(n / 5) * 45,
-          4,
-          8,
-          0.2,
-          0,
-          Math.PI * 2,
-        );
-        c.fill();
-      }
-      c.fillStyle = "#346d37";
-      for (let n = 0; n < 5; n++) {
-        c.save();
-        c.rotate(n * 1.25);
-        c.beginPath();
-        c.ellipse(0, -48, 20, 65, 0, 0, Math.PI * 2);
-        c.fill();
-        c.restore();
-      }
-      c.restore();
-    }
     c.restore();
   }
   const texture = new CanvasTexture(canvas);

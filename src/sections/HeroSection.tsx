@@ -1,55 +1,78 @@
 "use client";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+const CanJourney = dynamic(() => import("@/three/scenes/CanJourney"), { ssr: false });
 import { ArrowDown, ArrowUpRight, MoveRight, Smile } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { flavors } from "@/data/flavors";
 import { useFlavor } from "@/store/flavorStore";
 import { CanvasRoot } from "@/three/CanvasRoot";
 import { CanArt } from "@/components/ui/CanArt";
+import { cinematic } from "@/three/cinematicState";
 export function HeroSection() {
   const { index, select } = useFlavor();
   const flavor = flavors[index];
   const hero = useRef<HTMLElement>(null);
   const progress = useRef(0);
-  useEffect(() => {
+  useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.from(".hero-copy > *", {
-          y: 35,
-          opacity: 0,
-          stagger: 0.11,
-          duration: 0.85,
-          ease: "power3.out",
-        });
-        ScrollTrigger.create({
-          trigger: hero.current,
-          start: "top top",
-          end: "+=380",
-          pin: true,
-          scrub: true,
-          onUpdate: (s) => {
-            progress.current = s.progress;
-          },
-        });
-        gsap.to(".hero-copy", {
-          y: -55,
-          opacity: 0.35,
+        const section = document.getElementById("ingredients");
+        const navigation = document.querySelector(".navigation");
+        const backdrop = document.querySelector(".launch-backdrop");
+        const ticker = document.querySelector(".ticker");
+        if (!section || !hero.current || !backdrop || !navigation) return;
+        const copy = hero.current.querySelectorAll(".hero-copy,.flavor-dock,.hero-scribble,.hero-number,.scroll-cue");
+        const intro = section.querySelector(".section-intro");
+        const details = section.querySelectorAll(".ingredient-note,.ingredients-bottom");
+        const timeline = gsap.timeline({
+          defaults: { ease: "none" },
           scrollTrigger: {
-            trigger: hero.current,
-            start: "top top",
-            end: "+=380",
-            scrub: 1,
+            trigger: hero.current, start: "top top",
+            end: () => "+=" + (hero.current!.offsetHeight + (document.querySelector<HTMLElement>(".ticker")?.offsetHeight ?? 70) - 72),
+            pin: true, pinSpacing: false, scrub: true, invalidateOnRefresh: true,
+            onRefresh: self => { cinematic.launchEnd = self.end; cinematic.progress = self.progress; },
+            onUpdate: self => {
+              cinematic.progress = self.progress;
+              cinematic.launchEnd = self.end;
+              const arrive = gsap.utils.clamp(0, 1, (self.progress - .55) / .27);
+              const eased = arrive * arrive * (3 - 2 * arrive);
+              cinematic.sectionShift = -Math.max(0, self.end - self.scroll()) * eased;
+              gsap.set(section, { y: cinematic.sectionShift });
+              cinematic.to.y = cinematic.targetTop + cinematic.targetHeight / 2 - self.scroll() + cinematic.sectionShift
+                + .5 * cinematic.targetHeight / (2 * Math.tan(Math.PI / 9) * 8);
+            },
           },
         });
+        timeline.to(copy, { autoAlpha: 0, filter: "blur(12px)", duration: .17 }, .015)
+          .to(navigation, { autoAlpha: 0, filter: "blur(7px)", duration: .13 }, .035)
+          .to(hero.current.querySelector(".world-hero"), { autoAlpha: 0, duration: .18 }, .1)
+          .to(ticker, { autoAlpha: 0, duration: .12 }, .1)
+          .to(hero.current.querySelectorAll(".hero-sky,.hero-vignette"), { autoAlpha: 0, duration: .05 }, .37)
+          .fromTo(backdrop, { autoAlpha: 0 }, { autoAlpha: 1, duration: .06 }, .37)
+          .fromTo(section, { autoAlpha: 0 }, { autoAlpha: 1, duration: .12 }, .65)
+          .fromTo(intro, { opacity: 0, y: 50, filter: "blur(9px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: .19 }, .73)
+          .fromTo(details, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .14 }, .84)
+          .to(navigation, { autoAlpha: 1, filter: "blur(0px)", duration: .12 }, .88)
+          .set(ticker, { autoAlpha: 1 }, 1)
+          .set(backdrop, { autoAlpha: 0 }, 1);
+        timeline.fromTo(section, { "--atmosphere-opacity": 0 }, { "--atmosphere-opacity": 1, duration: .12 }, .85);
+        return () => {
+          cinematic.progress = 0;
+          cinematic.sectionShift = 0;
+        };
       });
     }, hero);
     return () => ctx.revert();
   }, []);
   return (
+    <>
+    <div className="launch-backdrop" aria-hidden="true" style={{ "--flavor": flavor.primaryColor, "--flavor-light": flavor.secondaryColor, "--flavor-bg": flavor.backgroundColor } as React.CSSProperties} />
+    <div className="can-journey-mount"><CanJourney /></div>
     <section
       ref={hero}
       className="hero"
@@ -62,7 +85,7 @@ export function HeroSection() {
         } as React.CSSProperties
       }
     >
-      <div className="hero-sky" />
+      <div className="hero-sky"><img className="cinematic-plate" src="/images/cinematic-world.webp" alt="" width={1672} height={941} fetchPriority="high" /></div>
       <div key={index} className="flavor-wipe" />
       <CanvasRoot flavor={flavor} progress={progress} />
       <div className="hero-vignette" />
@@ -72,11 +95,9 @@ export function HeroSection() {
           FEEL-GOOD.
         </div>
         <h1>
-          SODA,
-          <br />
-          BUT WAY
-          <br />
-          MORE FUN<span>.</span>
+          <span className="hero-headline-line">SODA,</span>
+          <span className="hero-headline-line">BUT WAY</span>
+          <span className="hero-headline-line">MORE FUN<span>.</span></span>
         </h1>
         <p>Big flavor. Bright energy. Zero boring.</p>
         <div className="hero-actions">
@@ -99,10 +120,6 @@ export function HeroSection() {
         <br />
         brighter days.
         <Smile size={39} strokeWidth={1.5} />
-      </div>
-      <div className="can-hint">
-        <span>GIVE IT A SPIN</span>
-        <span>↔</span>
       </div>
       <a className="scroll-cue" href="#ingredients">
         <span>SCROLL TO THE GOOD STUFF</span>
@@ -148,5 +165,6 @@ export function HeroSection() {
       </div>
       <span className="hero-number">0{index + 1} / 06</span>
     </section>
+    </>
   );
 }

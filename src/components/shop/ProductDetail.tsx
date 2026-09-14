@@ -39,7 +39,6 @@ export function ProductDetail({ flavor: f }: { flavor: Flavor }) {
             {f.fruitType.toUpperCase()}
           </div>
           <CanvasRoot flavor={f} mode="product" />
-          <span className="product-drag">↔ DRAG THE CAN. FEEL THE FIZZ.</span>
           <div className="product-swatches">
             {flavors.map((flavor) => (
               <Link

@@ -42,14 +42,12 @@ export function BubbleSystem({
     ref.current!.instanceMatrix.needsUpdate = true;
   });
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, count]}>
+    <instancedMesh ref={ref} args={[undefined, undefined, count]} frustumCulled={false}>
       <sphereGeometry args={[1, 20, 16]} />
-      <shaderMaterial
-        vertexShader={vertex}
-        fragmentShader={fragment}
-        transparent
-        depthWrite={false}
-      />
+      <BubbleMaterial />
     </instancedMesh>
   );
+}
+export function BubbleMaterial() {
+  return <shaderMaterial vertexShader={vertex} fragmentShader={fragment} transparent depthWrite={false} />;
 }

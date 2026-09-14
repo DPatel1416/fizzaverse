@@ -12,6 +12,8 @@ import { Studio } from "./World";
 import { SceneBoundary } from "../CanvasRoot";
 import { CanArt } from "@/components/ui/CanArt";
 import { useCanDrag } from "../useCanDrag";
+import { cinematic } from "../cinematicState";
+import { ChilledAtmosphere, FlavorLight } from "./Atmosphere";
 function SceneCanvas({
   children,
   camera = [0, 0, 10],
@@ -21,15 +23,20 @@ function SceneCanvas({
 }) {
   const [active, setActive] = useState(true);
   const [low, setLow] = useState(false);
+  const [visible, setVisible] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    setLow(innerWidth < 768);
+    const resize = () => setLow(innerWidth < 768);
+    const visibility = () => setVisible(!document.hidden);
+    resize();
+    window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", visibility);
     const observer = new IntersectionObserver(
       ([e]) => setActive(e.isIntersecting),
       { rootMargin: "100px" },
     );
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", visibility); };
   }, []);
   return (
     <div className="section-canvas" ref={ref}>
@@ -43,7 +50,7 @@ function SceneCanvas({
         <Canvas
           camera={{ position: camera, fov: 40 }}
           dpr={[1, low ? 1 : 1.4]}
-          frameloop={active ? "always" : "never"}
+          frameloop={active && visible ? "always" : "never"}
           gl={{ antialias: !low, alpha: true }}
         >
           <Suspense fallback={null}>
@@ -93,7 +100,9 @@ function ExplodedCan({
   }, []);
   useFrame(({ clock }, d) => {
     if (!ref.current || !lid.current) return;
-    drag.settle(Math.min(d, 0.05));
+    d = Math.min(d, .05);
+    ref.current.visible = !cinematic.ready;
+    drag.settle(d);
     const target = opened ? (reduced ? 0.65 : progress.current * 0.72) : 0;
     lid.current.position.y = MathUtils.damp(
       lid.current.position.y,
@@ -116,8 +125,11 @@ function ExplodedCan({
       7,
       d,
     );
+    Object.assign(cinematic.destination, { rx: ref.current.rotation.x, ry: ref.current.rotation.y, rz: ref.current.rotation.z, opened, resetKey });
   });
   return (
+    <>
+    <ChilledAtmosphere flavor={flavors[index]} reduced={reduced} ingredient mobile />
     <group
       ref={ref}
       rotation={[0.1, -0.35, -0.15]}
@@ -134,8 +146,9 @@ function ExplodedCan({
       <group position={[1.5, -0.4, -0.2]} scale={0.7}>
         <Fruit flavor={flavors[index]} />
       </group>
-      <BubbleSystem count={12} reduced={reduced} />
+      <BubbleSystem count={18} reduced={reduced} />
     </group>
+    </>
   );
 }
 export function IngredientsScene({
@@ -154,25 +167,32 @@ export function IngredientsScene({
   );
 }
 function Arc() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => { const mq = matchMedia("(prefers-reduced-motion: reduce)"); const update = () => setReduced(mq.matches); update(); mq.addEventListener("change", update); return () => mq.removeEventListener("change", update); }, []);
   const index = useFlavor((s) => s.index);
   const select = useFlavor((s) => s.select);
   const ref = useRef<Group>(null);
-  useFrame((_, d) => {
+  useFrame(({ clock }, d) => {
+    d = Math.min(d, .05);
     ref.current?.children.forEach((g, i) => {
       let offset = i - index;
       if (offset > 3) offset -= 6;
       if (offset < -2) offset += 6;
       const x = offset * 1.7,
-        z = -Math.abs(offset) * 0.85,
+        z = offset === 0 ? .5 : -Math.abs(offset) * 0.95,
         scale = offset === 0 ? 1.2 : 0.82;
-      g.position.x = MathUtils.damp(g.position.x, x, 5, d);
+      g.position.x = reduced ? x : MathUtils.damp(g.position.x, x, 5, d);
+      g.position.y = reduced ? 0 : (offset === 0 ? Math.sin(clock.elapsedTime * .7) * .065 : 0);
       g.position.z = MathUtils.damp(g.position.z, z, 5, d);
       g.rotation.z = MathUtils.damp(g.rotation.z, offset * -0.09, 5, d);
-      g.rotation.y = MathUtils.damp(g.rotation.y, offset * -0.13, 5, d);
+      g.rotation.y = MathUtils.damp(g.rotation.y, -.35 + offset * -.2, reduced ? 100 : 5, d);
       g.scale.setScalar(MathUtils.damp(g.scale.x, scale, 5, d));
     });
   });
   return (
+    <>
+    <FlavorLight flavor={flavors[index]} reduced={reduced} />
+    <CarouselFruit index={index} reduced={reduced} />
     <group ref={ref}>
       {flavors.map((f, i) => (
         <group
@@ -185,7 +205,23 @@ function Arc() {
         </group>
       ))}
     </group>
+    </>
   );
+}
+function CarouselFruit({ index, reduced }: { index: number; reduced: boolean }) {
+  const ref = useRef<Group>(null);
+  const entry = useRef(0);
+  useEffect(() => { entry.current = reduced ? 0 : 1; }, [index, reduced]);
+  useFrame(({ clock }, d) => {
+    entry.current = MathUtils.damp(entry.current, 0, 4, Math.min(d, .05));
+    ref.current?.children.forEach((g, i) => {
+      const side = i ? 1 : -1;
+      g.position.set(side * (1.3 + entry.current * .9), (i ? .6 : -1) + (reduced ? 0 : Math.sin(clock.elapsedTime * .6 + i) * .12), .6 - entry.current * 2);
+      g.rotation.set(.2, side * (.4 + entry.current), side * .3);
+      g.scale.setScalar(.38 * (1 - entry.current * .6));
+    });
+  });
+  return <group ref={ref}>{[0, 1].map(i => <group key={i} scale={.38}><Fruit flavor={flavors[index]} index={i} /></group>)}</group>;
 }
 export function CarouselScene() {
   return (

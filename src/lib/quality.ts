@@ -3,18 +3,18 @@ export const qualityProfiles = {
   high: {
     dpr: 1.75,
     bubbles: 55,
-    droplets: 110,
+    droplets: 620,
     segments: 96,
     transmission: 0.7,
   },
   medium: {
     dpr: 1.35,
     bubbles: 35,
-    droplets: 65,
+    droplets: 360,
     segments: 64,
     transmission: 0.35,
   },
-  low: { dpr: 1, bubbles: 18, droplets: 32, segments: 48, transmission: 0 },
+  low: { dpr: 1, bubbles: 18, droplets: 150, segments: 48, transmission: 0 },
 };
 export function seeded(seed: number) {
   let s = seed;

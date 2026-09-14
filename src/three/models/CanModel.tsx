@@ -1,8 +1,11 @@
 "use client";
 import { useEffect, useMemo, useRef, type RefObject } from "react";
 import { Group, Vector2, InstancedMesh, Object3D, LatheGeometry } from "three";
+import { useTexture } from "@react-three/drei";
+import { FRUIT_ATLAS } from "./PhotographicFruit";
 import type { Flavor } from "@/data/flavors";
 import { makeLabel } from "../materials/label";
+import { chilledSurface } from "../materials/chilledSurface";
 import { seeded, qualityProfiles, type Quality } from "@/lib/quality";
 export function CanModel({
   flavor,
@@ -21,7 +24,9 @@ export function CanModel({
   rotation?: [number, number, number];
   scale?: number;
 }) {
-  const texture = useMemo(() => makeLabel(flavor), [flavor]);
+  const fruitAtlas = useTexture(FRUIT_ATLAS);
+  const cold = useMemo(() => chilledSurface(), []);
+  const texture = useMemo(() => makeLabel(flavor, fruitAtlas.image), [flavor, fruitAtlas.image]);
   useEffect(() => () => texture.dispose(), [texture]);
   const points = useMemo(
     () => [
@@ -69,10 +74,13 @@ export function CanModel({
       >
         <meshPhysicalMaterial
           map={texture}
-          metalness={0.3}
-          roughness={0.3}
+          bumpMap={condensation ? cold.bump : undefined}
+          bumpScale={.014}
+          roughnessMap={condensation ? cold.roughness : undefined}
+          metalness={0.38}
+          roughness={0.36}
           clearcoat={0.8}
-          clearcoatRoughness={0.16}
+          clearcoatRoughness={0.22}
         />
       </mesh>
       <group ref={lidRef} position={[0, exploded * 0.6, 0]}>
@@ -137,7 +145,7 @@ export function CanModel({
       </mesh>
       <mesh position={[0, -1.373, 0]}>
         <cylinderGeometry args={[0.5, 0.5, 0.022, n]} />
-        <meshStandardMaterial color="#a7afb3" metalness={1} roughness={0.24} />
+        <meshStandardMaterial color="#a7afb3" metalness={1} roughness={0.36} />
       </mesh>
       {condensation && (
         <Condensation count={qualityProfiles[quality].droplets} />
@@ -154,9 +162,9 @@ function Condensation({ count }: { count: number }) {
       const a = random() * Math.PI * 2,
         y = (random() - 0.5) * 2.3,
         r = 0.624;
-      const s = 0.008 + random() * 0.022;
+      const s = 0.005 + Math.pow(random(), 2.4) * 0.024;
       o.position.set(Math.sin(a) * r, y, Math.cos(a) * r);
-      o.scale.set(s, s * (1 + random() * 0.9), s * 0.48);
+      o.scale.set(s, s * (1 + random() * 0.9), s * 0.65);
       o.rotation.set(0, a, 0);
       o.updateMatrix();
       ref.current!.setMatrixAt(i, o.matrix);
@@ -168,12 +176,14 @@ function Condensation({ count }: { count: number }) {
       <sphereGeometry args={[1, 8, 6]} />
       <meshPhysicalMaterial
         color="#fff"
-        metalness={0.1}
-        roughness={0.06}
-        transparent
-        opacity={0.65}
-        clearcoat={1}
-        envMapIntensity={2}
+        metalness={0}
+        roughness={0.025}
+        ior={1.33}
+        transmission={.96}
+        thickness={.012}
+        clearcoat={.65}
+        clearcoatRoughness={.04}
+        envMapIntensity={1.1}
       />
     </instancedMesh>
   );

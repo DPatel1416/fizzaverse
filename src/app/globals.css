@@ -2858,33 +2858,6 @@ body {
   font-weight: 400;
   text-shadow: 0 1px 9px #9a31464a;
 }
-.flavor-wipe {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  background: linear-gradient(
-    100deg,
-    transparent 15%,
-    var(--accent) 50%,
-    transparent 85%
-  );
-  opacity: 0;
-  animation: flavor-sweep 0.9s ease-in-out;
-}
-@keyframes flavor-sweep {
-  0% {
-    transform: translateX(-120%) skewX(-20deg);
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.2;
-  }
-  100% {
-    transform: translateX(120%) skewX(-20deg);
-    opacity: 0;
-  }
-}
 .section-fallback {
   height: 100%;
   display: flex;
@@ -2959,3 +2932,112 @@ body {
     margin-top: 15px;
   }
 }
+.can-journey {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+}
+.can-journey canvas { pointer-events: none; }
+.hero-copy { perspective: 1100px; }
+.hero h1 .hero-headline-line {
+  display: block;
+  color: inherit;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.ingredients-section {
+  isolation: isolate;
+  background-image:
+    radial-gradient(ellipse at 72% 35%, color-mix(in srgb, var(--flavor-light, #ffb3c9) 48%, transparent), transparent 51%),
+    radial-gradient(ellipse at 99% 95%, color-mix(in srgb, var(--accent, #f5f34c) 22%, transparent), transparent 55%);
+}
+.ingredients-section .section-intro { position: relative; z-index: 2; }
+.ingredient-note { text-shadow: 0 2px 16px #fff8ed; }
+.hero-sky, .hero { transition: background-color 1s cubic-bezier(.22,1,.36,1); }
+.carousel-info { perspective: 900px; }
+.dock-flavor img { transition: transform .8s cubic-bezier(.16,1,.3,1), filter .8s; }
+.dock-flavor.selected img { filter: drop-shadow(0 10px 10px #54153144) brightness(1.08); }
+@media (prefers-reduced-motion: reduce) {
+  .can-journey { display: none; }
+  .hero h1 .hero-headline-line { will-change: auto; }
+  .flavor-wipe { animation: none !important; }
+}
+
+
+/* A refracting bubble crosses the lens during a flavor change. */
+.flavor-wipe {
+  position: absolute; z-index: 5; pointer-events: none;
+  inset: auto;
+  left: 68%; top: 45%; width: 52vmax; height: 52vmax;
+  border-radius: 50%; opacity: 1;
+  border: 2px solid #fff8edbb;
+  box-shadow: inset 12px 6px 30px #ffffff55, inset -12px -6px 24px color-mix(in srgb, var(--accent) 32%, transparent);
+  background: radial-gradient(circle at 28% 24%, #ffffff38, transparent 35%, color-mix(in srgb, var(--flavor-light) 22%, transparent) 80%);
+  backdrop-filter: saturate(1.55);
+  animation: flavor-lens 1.15s cubic-bezier(.32,.02,.15,1) both;
+}
+@keyframes flavor-lens {
+  0% { transform: translate(-50%, -50%) scale(0); visibility: visible; }
+  99% { transform: translate(-50%, -50%) scale(4.5); visibility: visible; }
+  100% { transform: translate(-50%, -50%) scale(4.5); visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) { .flavor-wipe { display: none; } }
+
+@property --flavor { syntax: "<color>"; inherits: true; initial-value: #e94071; }
+@property --world-hue { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@property --flavor-light { syntax: "<color>"; inherits: true; initial-value: #ffb3c9; }
+@property --flavor-bg { syntax: "<color>"; inherits: true; initial-value: #ef839b; }
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #f5f34c; }
+.hero, .ingredients-section, .launch-backdrop {
+  transition: --flavor .95s, --flavor-light .95s, --flavor-bg .95s, --accent .95s, --world-hue .95s;
+}
+.hero-sky { overflow: hidden; }
+.cinematic-plate {
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.04); transform-origin: center;
+
+}
+.hero-vignette {
+  background: linear-gradient(90deg, #520c252b, transparent 68%), linear-gradient(0deg, #51112455, transparent 24%);
+}
+@media (max-width: 767px) {
+  .cinematic-plate { object-position: 57% center; }
+  .hero-vignette { background: linear-gradient(180deg, #6b123940, #80103532 38%, transparent 60%, #50122c55); }
+}
+@media (max-width: 767px) { .flavor-wipe { backdrop-filter: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .hero, .ingredients-section { transition: none; }
+}
+
+.hero-sky { isolation: isolate; }
+.hero-sky::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, var(--flavor) 0%, var(--flavor) 42%, transparent 82%), linear-gradient(0deg, var(--flavor), transparent 38%);
+  mix-blend-mode: color;
+}
+
+/* Scroll anchoring must not compensate for the pinned hero's DOM movement. */
+html, body { overflow-anchor: none; }
+.ingredients-section .section-canvas { opacity: var(--atmosphere-opacity, 1); }
+/* The hero holds the frame while the existing ingredient section arrives underneath. */
+.hero { z-index: 3; background: transparent; }
+.launch-backdrop {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none; visibility: hidden;
+  background: radial-gradient(ellipse at 54% 42%, var(--flavor-light), var(--flavor-bg) 55%, var(--flavor));
+}
+.ingredients-section {
+  position: relative; z-index: 4;
+  background: radial-gradient(ellipse at 54% 42%, var(--flavor-light), var(--flavor-bg) 55%, var(--flavor));
+}
+.ingredients-stage { margin-left: 0; }
+@media (max-width: 767px) {
+  .ingredients-stage .note-one, .ingredients-stage .note-two { top: 4%; }
+  .ingredients-stage .note-three, .ingredients-stage .note-four { bottom: 0; }
+}
+.ingredients-section .section-intro h2 { color: #fff8ed; text-shadow: 0 3px 0 #9b461b18; }
+.ingredients-section .ingredient-note { text-shadow: none; color: var(--ink); }
+.ingredients-section .ingredient-note svg { color: var(--ink); }
+.ingredients-section .ingredient-interaction button { border-color: #6d341a30; }
+@media (prefers-reduced-motion: reduce) { .launch-backdrop { display: none; } }

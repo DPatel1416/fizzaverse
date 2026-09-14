@@ -13,8 +13,8 @@ Open `http://localhost:3000`. `npm run build` creates a static export in `out/`,
 
 ## Experience
 
-- Six flavor worlds, original front-facing can artwork, procedural can bodies, lids, pull tabs, rims, instanced condensation, fruit, and iridescent bubbles.
-- Pinned hero sequence, damped drag interaction, responsive compositions, and reduced-motion support.
+- Six flavor worlds, original front-facing can artwork, procedural can bodies, lids, pull tabs, rims, instanced condensation, photographic fruit at multiple scene depths, and iridescent bubbles.
+- A pinned hero with one persistent can: center, accelerate through the lens, burst ingredients outward, and settle into a warm orange scene. The timeline reverses with scroll and adds no empty pin spacing. Bubble-lens flavor changes, damped drag interaction, responsive compositions, and reduced-motion support remain available.
 - Interactive ingredients can: drag on two axes, rotate with buttons, separate/close its lid, and reset its view.
 - A 3D six-can carousel with pointer, horizontal wheel, and keyboard controls.
 - A 12-slot procedural cardboard tray with animated placement and validated variety packs.
@@ -25,7 +25,7 @@ Open `http://localhost:3000`. `npm run build` creates a static export in `out/`,
 
 `src/data/flavors.ts` is the flavor catalog and pricing source. `src/three/models/CanModel.tsx` is the reusable can asset boundary; replace its meshes with a GLB without changing the storefront. `src/three/materials/label.ts` generates replaceable canvas label textures. `scripts/generate-art.ts` generates standalone SVG product art. `src/lib/quality.ts` owns rendering profiles. Cart and pack state live in `src/store/`.
 
-The environment is generated locally with studio light panels. Fruit geometry, seeds, surface maps, particles, and box geometry are procedural. The story photograph is an original generated asset, served as a compressed WebP. The source PNG is retained for future art direction.
+The scene combines a generated cinematic environment plate, camera-facing photographic fruit cutouts, and live 3D cans, ice, ribbons, and particles. Fruit uses one alpha atlas across all flavors; it is photographic artwork positioned in 3D, not a scanned or freely rotatable fruit model. Studio light panels and the environment plate create reflections, while shared microdroplet maps and instanced water beads create the chilled can finish. Ice uses small refraction buffers, with a simpler mobile material for secondary cubes. The scroll handoff reuses the can model and preserves its open/closed state. Offscreen scenes pause, rendering resolution adapts, and reduced-motion preferences disable the traveling can and large sweeps. The story photograph is an original generated asset, served as a compressed WebP. The source PNG is retained for future art direction.
 
 ## Validation
 

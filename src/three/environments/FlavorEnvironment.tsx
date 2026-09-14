@@ -4,42 +4,17 @@ import { useFrame } from "@react-three/fiber";
 import { Group, MathUtils } from "three";
 import type { Flavor } from "@/data/flavors";
 import type { Quality } from "@/lib/quality";
-import {
-  StrawberryModel,
-  CitrusSlice,
-  CherryModel,
-  GrapeCluster,
-  WatermelonSlice,
-} from "../models/FruitModels";
-export function Fruit({
-  flavor,
-  index = 0,
-}: {
-  flavor: Flavor;
-  index?: number;
-}) {
-  switch (flavor.fruitType) {
-    case "strawberry":
-      return index % 2 ? <CitrusSlice /> : <StrawberryModel />;
-    case "orange":
-      return <CitrusSlice kind="orange" />;
-    case "lime":
-      return <CitrusSlice kind="lime" />;
-    case "cherry":
-      return <CherryModel />;
-    case "grape":
-      return <GrapeCluster />;
-    case "watermelon":
-      return <WatermelonSlice />;
-  }
+import { PhotographicFruit } from "../models/PhotographicFruit";
+export function Fruit({ flavor, index = 0 }: { flavor: Flavor; index?: number }) {
+  return <PhotographicFruit type={flavor.fruitType} variation={index} />;
 }
 const placements: [number, number, number, number][] = [
-  [0.0, 2.12, -1.1, 0.88],
-  [3.85, 1.85, -1.8, 0.73],
-  [4.12, -0.8, -0.7, 0.86],
-  [-0.1, -2.1, -2.2, 0.64],
+  [0.0, 2.12, -1.1, .95],
+  [3.85, 2.05, -1.8, .78],
+  [4.2, -.7, 1.1, .9],
+  [-4.45, .65, 2.5, 1.0],
   [2.9, -2.1, -1.8, 0.64],
-  [4.25, 2.9, -3.2, 0.52],
+  [4.25, 2.9, -4.2, .58],
 ];
 const mobilePlacements: [number, number, number, number][] = [
   [-1.6, 1.65, -2, 0.6],
@@ -71,18 +46,19 @@ export function FlavorEnvironment({
   useEffect(() => {
     entry.current = motionIntensity ? 1 : 0;
   }, [flavor.id, motionIntensity]);
-  useFrame(({ clock }, delta) => {
+  useFrame(({ clock, pointer }, delta) => {
+    delta = Math.min(delta, .05);
     entry.current = MathUtils.damp(entry.current, 0, 4, delta);
     ref.current?.children.forEach((g, i) => {
       const p = layout[i];
-      g.position.x = p[0] * (1 + entry.current * 0.18);
-      g.position.z = p[2] - entry.current;
+      g.position.x = p[0] * (1 + entry.current * .3) + pointer.x * (.05 + i * .012) * motionIntensity;
+      g.position.z = p[2] - entry.current * 3;
       g.scale.setScalar(p[3] * fruitScale * (1 - entry.current * 0.65));
       g.position.y =
         p[1] * (1 + entry.current * 0.4) +
         Math.sin(clock.elapsedTime * 0.65 + i) * 0.1 * motionIntensity;
       g.rotation.y =
-        ((i % 3) - 1) * 0.45 +
+        ((i % 3) - 1) * 0.45 + entry.current * (i % 2 ? 1.5 : -1.5) +
         Math.sin(clock.elapsedTime * 0.3 + i) * 0.24 * motionIntensity;
       g.rotation.z =
         Math.sin(clock.elapsedTime * 0.4 + i) * 0.15 * motionIntensity +
@@ -98,7 +74,7 @@ export function FlavorEnvironment({
           rotation={[0.25, i * 0.6, -0.3]}
           scale={p[3]}
         >
-          <Fruit flavor={flavor} index={i} />
+          <Fruit flavor={flavor} index={i === 3 ? 4 : i === 4 ? 3 : i} />
         </group>
       ))}
     </group>

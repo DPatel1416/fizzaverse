@@ -4,34 +4,42 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import {
   Environment,
   Lightformer,
-  RoundedBox,
   PerformanceMonitor,
+  useTexture,
 } from "@react-three/drei";
-import { Group, MathUtils } from "three";
+import { Group, MathUtils, SRGBColorSpace } from "three";
 import type { Flavor } from "@/data/flavors";
 import { qualityProfiles, detectQuality, type Quality } from "@/lib/quality";
 import { CanModel } from "../models/CanModel";
 import { FlavorEnvironment } from "../environments/FlavorEnvironment";
 import { BubbleSystem } from "../particles/BubbleSystem";
 import { useCanDrag } from "../useCanDrag";
+import { cinematic } from "../cinematicState";
+import { ChilledAtmosphere } from "./Atmosphere";
 export function Studio() {
+  const photographicLight = useTexture("/images/cinematic-world.webp");
+  photographicLight.colorSpace = SRGBColorSpace;
   return (
     <>
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[-4, 7, 5]} intensity={3} color="#fff1da" />
-      <directionalLight position={[5, 2, -3]} intensity={2.8} color="#ffd3cf" />
+      <ambientLight intensity={.65} />
+      <directionalLight position={[4, 7, 5]} intensity={2.8} color="#ffe2c2" />
+      <directionalLight position={[-5, 2, -3]} intensity={1.8} color="#ffc1d1" />
       <Environment resolution={128}>
+        <mesh position={[0, 0, 9]} rotation={[0, Math.PI, 0]}>
+          <planeGeometry args={[30, 18]} />
+          <meshBasicMaterial map={photographicLight} toneMapped={false} />
+        </mesh>
         <Lightformer
           position={[-4, 3, 4]}
           scale={[3, 8, 1]}
-          intensity={4}
+          intensity={2.8}
           color="#fff8ef"
         />
         <Lightformer
           position={[5, 2, 1]}
           rotation={[0, -Math.PI / 3, 0]}
           scale={[2, 7, 1]}
-          intensity={5}
+          intensity={3.6}
         />
         <Lightformer
           position={[0, 6, -2]}
@@ -76,11 +84,12 @@ function HeroCan({
       previous.current = flavor.id;
     }
   }, [flavor, reduced]);
-  useFrame(({ clock, pointer }, delta) => {
+  useFrame(({ clock, pointer, camera }, delta) => {
     const g = group.current;
     if (!g) return;
     const d = Math.min(delta, 0.05),
-      p = progress?.current ?? 0;
+      p = reduced ? 0 : (progress?.current ?? 0);
+    g.visible = mode !== "hero" || !cinematic.ready;
     spin.current = MathUtils.damp(spin.current, 0, 5, d);
     drag.settle(d);
     const t = reduced ? 0 : clock.elapsedTime;
@@ -116,8 +125,9 @@ function HeroCan({
       3,
       d,
     );
-    const target = mode === "hero" ? (mobile ? 1.3 : 1.45) : 1.3;
+    const target = (mode === "hero" ? (mobile ? 1.3 : 1.45) : 1.3) * (1 + Math.sin(Math.min(spin.current, Math.PI)) * .09);
     g.scale.setScalar(MathUtils.damp(g.scale.x, target, 6, d));
+    if (mode === "hero" && !cinematic.active) Object.assign(cinematic.source, { x: g.position.x - camera.position.x, y: g.position.y - camera.position.y, rx: g.rotation.x, ry: g.rotation.y, rz: g.rotation.z, scale: g.scale.x });
   });
   return (
     <group ref={group} scale={0.75} {...drag.handlers}>
@@ -125,65 +135,13 @@ function HeroCan({
     </group>
   );
 }
-function Architecture({ flavor }: { flavor: Flavor }) {
-  return (
-    <group>
-      <mesh position={[3, -0.1, -4]} rotation={[0, 0.3, 0.1]}>
-        <torusGeometry args={[4.3, 0.55, 24, 96]} />
-        <meshStandardMaterial color={flavor.secondaryColor} roughness={0.38} />
-      </mesh>
-      <mesh
-        position={[-3.6, 0.9, -5]}
-        rotation={[0, 0.5, -0.4]}
-        scale={[1, 1.5, 1]}
-      >
-        <torusGeometry args={[3.5, 0.95, 24, 96]} />
-        <meshStandardMaterial color={flavor.primaryColor} roughness={0.38} />
-      </mesh>
-      <mesh
-        position={[6, -0.5, -2]}
-        rotation={[0.1, -0.3, -0.1]}
-        scale={[1, 1.4, 1]}
-      >
-        <torusGeometry args={[3.5, 0.4, 20, 96]} />
-        <meshStandardMaterial color="#ffcf93" roughness={0.4} />
-      </mesh>
-      <mesh position={[0, -6, -3]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color={flavor.backgroundColor} roughness={0.48} />
-      </mesh>
-      <RoundedBox
-        args={[0.45, 0.5, 0.45]}
-        radius={0.08}
-        position={[3.3, 0.4, 1.3]}
-        rotation={[0.5, 0.6, 0.3]}
-      >
-        <meshPhysicalMaterial
-          color="#fff1ef"
-          roughness={0.05}
-          transparent
-          opacity={0.35}
-          metalness={0.2}
-          clearcoat={1}
-        />
-      </RoundedBox>
-      <RoundedBox
-        args={[0.4, 0.4, 0.4]}
-        radius={0.07}
-        position={[-0.6, -0.3, 0.6]}
-        rotation={[0.8, 0.3, 0.5]}
-      >
-        <meshPhysicalMaterial
-          color="#fff"
-          roughness={0.08}
-          transparent
-          opacity={0.35}
-          metalness={0.2}
-          clearcoat={1}
-        />
-      </RoundedBox>
-    </group>
-  );
+function CameraRig({ reduced }: { reduced: boolean }) {
+  useFrame(({ camera, pointer }, delta) => {
+    const d = Math.min(delta, .05);
+    camera.position.x = MathUtils.damp(camera.position.x, reduced ? 0 : pointer.x * .12, 2.2, d);
+    camera.position.y = MathUtils.damp(camera.position.y, reduced ? 0 : pointer.y * .065, 2.2, d);
+  });
+  return null;
 }
 export default function World({
   flavor,
@@ -238,6 +196,7 @@ export default function World({
       <Suspense fallback={null}>
         <PerformanceMonitor onDecline={() => setQuality("low")}>
           <Studio />
+          <CameraRig reduced={reduced} />
           <HeroCan
             flavor={flavor}
             quality={quality}
@@ -256,7 +215,7 @@ export default function World({
             count={qualityProfiles[quality].bubbles}
             reduced={reduced}
           />
-          {mode === "hero" && <Architecture flavor={flavor} />}
+          <ChilledAtmosphere flavor={flavor} reduced={reduced} mobile={mobile} />
         </PerformanceMonitor>
       </Suspense>
     </Canvas>

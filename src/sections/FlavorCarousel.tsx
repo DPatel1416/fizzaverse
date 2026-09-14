@@ -78,10 +78,10 @@ export function FlavorCarousel() {
         <AnimatePresence mode="wait">
           <motion.div
             key={f.id}
-            initial={{ y: 14, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -10, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ y: 22, rotateX: -18, clipPath: "inset(100% 0 0 0)" }}
+            animate={{ y: 0, rotateX: 0, clipPath: "inset(0% 0 0 0)" }}
+            exit={{ y: -18, rotateX: 12, clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: .32, ease: [.22, 1, .36, 1] }}
           >
             <span className="eyebrow">0{index + 1} / 06</span>
             <h3>{f.name}</h3>
