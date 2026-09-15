@@ -136,7 +136,7 @@ function ExplodedCan({
       scale={1.15}
       {...drag.handlers}
     >
-      <CanModel flavor={flavors[index]} lidRef={lid} />
+      <CanModel flavor={flavors[index]} lidRef={lid} chill reduced={reduced} />
       <group position={[0.18, 1.65, 0]} scale={opened ? 0.3 : 0}>
         <Fruit flavor={flavors[index]} />
       </group>

@@ -131,7 +131,7 @@ function HeroCan({
   });
   return (
     <group ref={group} scale={0.75} {...drag.handlers}>
-      <CanModel flavor={flavor} quality={quality} />
+      <CanModel flavor={flavor} quality={quality} chill reduced={reduced} />
     </group>
   );
 }

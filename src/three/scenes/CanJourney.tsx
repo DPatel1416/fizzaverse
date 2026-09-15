@@ -26,6 +26,7 @@ function PersistentCan({ quality, onReady }: { quality: Quality; onReady: () => 
   const reset = useRef(0);
   const spin = useRef(0);
   const previous = useRef(index);
+  const mistIntensity = useRef(1);
   useEffect(() => { cinematic.ready = true; onReady(); return () => { cinematic.ready = false; }; }, [onReady]);
   useEffect(() => { if (previous.current !== index) { spin.current = Math.PI * 2; previous.current = index; } }, [index]);
   useFrame(({ size, clock, pointer }, delta) => {
@@ -58,6 +59,7 @@ function PersistentCan({ quality, onReady }: { quality: Quality; onReady: () => 
       y = (size.height / 2 - to.y) * unit * back;
     }
     const live = p < .12 || p > .94;
+    mistIntensity.current = 1 - smooth(p, .1, .25) + smooth(p, .8, 1);
     g.visible = z < 10;
     const idle = Math.sin(clock.elapsedTime * .7) * .055 * (1 - center);
     g.position.set(x, y + idle, z);
@@ -74,7 +76,7 @@ function PersistentCan({ quality, onReady }: { quality: Quality; onReady: () => 
   return <>
     <SodaFill flavor={flavors[index]} />
     <group ref={ref} {...drag.handlers}>
-      <CanModel flavor={flavors[index]} quality={quality} lidRef={lid} />
+      <CanModel flavor={flavors[index]} quality={quality} lidRef={lid} chill mistIntensity={mistIntensity} />
       <group ref={lidFruit} position={[.18, 1.65, 0]} scale={0}><Fruit flavor={flavors[index]} /></group>
     </group>
     <IngredientBurst flavor={flavors[index]} mobile={quality === "low"} />
