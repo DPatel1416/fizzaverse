@@ -17,7 +17,7 @@ import { useCanDrag } from "../useCanDrag";
 import { cinematic } from "../cinematicState";
 import { ChilledAtmosphere } from "./Atmosphere";
 export function Studio() {
-  const photographicLight = useTexture("/images/cinematic-world.webp");
+  const photographicLight = useTexture("/images/cinematic-world-v2.webp");
   photographicLight.colorSpace = SRGBColorSpace;
   return (
     <>
@@ -46,6 +46,13 @@ export function Studio() {
           rotation={[Math.PI / 2, 0, 0]}
           scale={[8, 4, 1]}
           intensity={3}
+        />
+        <Lightformer
+          position={[-2.8, 1, 3]}
+          rotation={[0, Math.PI / 7, 0]}
+          scale={[.35, 5.5, 1]}
+          intensity={4}
+          color="#d7f3ff"
         />
         <Lightformer
           position={[0, -4, 3]}

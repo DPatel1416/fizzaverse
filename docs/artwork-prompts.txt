@@ -27,3 +27,26 @@ Asset type: wide cinematic commercial environment background plate only, 16:9 wi
 Create a breathtaking photoreal high-end soda advertising environment: immersive rose-red glossy sculptural architectural arches and sweeping cream/golden arches in deep perspective. Brilliant peach-blue sunset sky and soft realistic sunlit clouds glimpsed to the right. Warm late-afternoon sunlight from the upper right, beautiful soft shadow and reflection gradients, tactile glossy ceramic/enamel architecture. The arches have architectural scale and real perspective, never flat graphic circles or toy torus rings.
 Composition: The LEFT 40% is darker rich berry pink, broad visually quiet negative space to later overlay a large white headline. The CENTER-RIGHT remains completely open for a live 3D soda can to be composited later. Put sculptural depth, cream-gold arches and glowing sky predominantly to the right and upper periphery. Small distant lush green foliage visible in the far right background near ground level. Red/pink translucent liquid splash and glossy rippling liquid foreground ONLY along the bottom edge and periphery. A few optical bokeh droplets peripheral, never crowding the central open area. Camera at a dynamic low commercial product angle, cinematic lens, realistic depth, warm red and pink bounce light, vibrant and sophisticated beverage campaign mood.
 Crucial exclusions: NO TEXT, NO LETTERS, NO LOGOS, NO CANS, NO BOTTLES, NO FRUIT, NO UI, NO WEBPAGE SCREENSHOT, NO HEADLINE. Background environment only. Photographic realism, not vector illustration, not a basic CGI scene.
+
+SEPTEMBER 2026 LIQUID UPGRADE
+Generated with built-in image_gen, exactly one call per asset. Original assets retained.
+Final project paths:
+C:/Users/dhruv/Desktop/My Projects/fizzaverse/public/images/cinematic-world-v2.webp
+C:/Users/dhruv/Desktop/My Projects/fizzaverse/public/images/soda-macro.webp
+
+HERO BACKGROUND EXACT PROMPT
+Use case: ads-marketing
+Asset type: 16:9 website hero background plate for a premium soda commercial, with no product.
+Primary request: An immersive cinematic architectural world beneath an enormous translucent berry-red liquid canopy that curves overhead toward the camera. Warm peach and gold architectural arches recede at the right toward a blue and pink sunset sky. A polished pink wet reflective floor extends into the scene. A crisp high-speed splash of translucent rose soda frames the bottom and right foreground, with tiny sharp droplets and subtle soft bokeh.
+Style/medium: Premium photoreal beverage advertising photography; cinematic 24mm wide-angle composition with convincing dimensional depth.
+Composition/framing: Preserve rich saturated dark berry negative space on the LEFT for a huge white headline to be added separately. Keep center-right open for an actual 3D can to be composited separately. The canopy, architectural arches, and foreground splash frame this empty staging space.
+Lighting/mood: Strong dramatic dimensional backlighting, warm peach and gold illumination, physically plausible glossy liquid surfaces, refraction and reflections, refreshing and luxurious.
+Constraints: Landscape 16:9. No product, no can, no bottle, no glass, no text, no typography, no logo, no watermark, no UI. No prominent fruit. No toy or plastic appearance. No black void. This is a background plate only.
+
+SODA TEXTURE EXACT PROMPT
+Use case: photorealistic-natural
+Asset type: Landscape macro photographic texture for an animated full-screen sparkling soda liquid shader.
+Primary request: A full-frame macro photograph of real clear, very lightly rose and gold tinted sparkling soda. Capture irregular liquid ripples and folds with refractive caustics, varied fine carbonation bubbles and tiny sharp white specular highlights. Include darker refractive depth and dense usable photographic detail.
+Style/medium: High-speed professional beverage macro photography, optically convincing transparent real liquid, sharp microdetail and organic variation.
+Composition/framing: Landscape full-frame liquid texture extending beyond all edges. Use subtle rose and gold tint that remains easy to recolor. Layered ripples, small bubbles of varied sizes and irregular spacing, bright fine highlights and deeper refracted shadows create texture throughout the frame.
+Constraints: No glass or container edges, no can, no bottle, no fruit, no text, no logo, no watermark. No uniform giant rings, no milkiness, no opaque liquid, no CGI smooth gradients, no abstract painting, no strong saturated hue. This must read as a detailed photograph of real clear sparkling soda.
