@@ -25,7 +25,7 @@ Open `http://localhost:3000`. `npm run build` creates a static export in `out/`,
 
 `src/data/flavors.ts` is the flavor catalog and pricing source. `src/three/models/CanModel.tsx` is the reusable can asset boundary; replace its meshes with a GLB without changing the storefront. `src/three/materials/label.ts` generates replaceable canvas label textures. `scripts/generate-art.ts` generates standalone SVG product art. `src/lib/quality.ts` owns rendering profiles. Cart and pack state live in `src/store/`.
 
-The scene combines a generated cinematic environment plate, camera-facing photographic fruit cutouts, and live 3D cans, ice, ribbons, and particles. Fruit uses one alpha atlas across all flavors; it is photographic artwork positioned in 3D, not a scanned or freely rotatable fruit model. Studio light panels and the environment plate create reflections, while shared microdroplet maps and instanced water beads create the chilled can finish. Ice uses small refraction buffers, with a simpler mobile material for secondary cubes. The scroll handoff reuses the can model and preserves its open/closed state. Offscreen scenes pause, rendering resolution adapts, and reduced-motion preferences disable the traveling can and large sweeps. The story photograph is an original generated asset, served as a compressed WebP. The source PNG is retained for future art direction.
+The scene combines a generated cinematic environment plate, camera-facing photographic fruit cutouts, and live 3D cans, ice, and particles. Fruit uses one alpha atlas across all flavors; it is photographic artwork positioned in 3D, not a scanned or freely rotatable fruit model. Studio light panels and the environment plate create reflections, while shared microdroplet maps and instanced water beads create the chilled can finish. Ice uses small refraction buffers, with a simpler mobile material for secondary cubes. The scroll handoff keeps one persistent can, opens its lid as the fruit settles, and fills the frame with a flavor-colored soda surface. Offscreen scenes pause, rendering resolution adapts, and reduced-motion preferences disable the traveling can and large sweeps. The story photograph is an original generated asset, served as a compressed WebP. The source PNG is retained for future art direction.
 
 ## Validation
 
@@ -35,7 +35,7 @@ npm test
 npm run build
 ```
 
-The tests cover catalog integrity, subscription/pack prices, merging cart lines, invalid inputs, quantity bounds, the 12-can constraint, custom-box merging, shipping thresholds, and demo order completion. Browser review covers desktop/mobile compositions, centered dialogs, product selections, persistence after reload, pack building, checkout, and ingredients-can controls and dragging.
+The tests cover catalog integrity, subscription/pack prices, merging cart lines, invalid inputs, quantity bounds, the 12-can constraint, custom-box merging, shipping thresholds, and demo order completion. Browser review covers desktop/mobile compositions, centered dialogs, product selections, persistence after reload, pack building, checkout, and the pinned transition, flavor-colored soda fill, and ingredients-can dragging.
 
 ## Demo boundaries
 

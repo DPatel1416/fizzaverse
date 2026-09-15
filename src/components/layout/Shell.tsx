@@ -42,13 +42,34 @@ export function Shell({ children }: { children: React.ReactNode }) {
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
       lenis = new Lenis({
         autoRaf: true,
-        anchors: true,
+        anchors: false,
         duration: 1.05,
         prevent: (node) => Boolean(node.closest("dialog")),
       });
     }
+    // Own same-page anchors before Next's Link handler performs its native
+    // jump. Otherwise Lenis can calculate a second target from stale scroll.
+    const onAnchor = (event: MouseEvent) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest<HTMLAnchorElement>("a[href]");
+      if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+      const url = new URL(link.href, location.href);
+      if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash) return;
+      const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+      if (!target) return;
+      event.preventDefault();
+      event.stopPropagation();
+      let top = 0;
+      for (let node: HTMLElement | null = target; node; node = node.offsetParent as HTMLElement | null) top += node.offsetTop;
+      setPanel(null);
+      history.pushState(null, "", url.hash);
+      if (lenis) lenis.scrollTo(Math.max(0, top - 72), { force: true });
+      else window.scrollTo({ top: Math.max(0, top - 72), behavior: "instant" });
+    };
+    window.addEventListener("click", onAnchor, true);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("click", onAnchor, true);
       lenis?.destroy();
     };
   }, []);
