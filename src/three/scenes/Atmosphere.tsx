@@ -58,7 +58,7 @@ export function ChilledAtmosphere({ flavor, reduced = false, mobile = false, ing
   return <>
     <FlavorLight flavor={flavor} reduced={reduced} />
     {ingredient && <LiquidRibbon flavor={flavor} reduced={reduced} ingredient />}
-    <IceCube position={ingredient ? [-1.75, 1.05, -.9] : [3.55, .15, 1.5]} scale={ingredient ? .65 : .85} seed={2} reduced={reduced} background={ingredient ? "#fff5eb" : flavor.backgroundColor} />
-    <IceCube position={ingredient ? [1.8, -.8, 1] : [-.15, -1.65, .8]} scale={ingredient ? .5 : .65} seed={4} reduced={reduced} background={ingredient ? "#fff5eb" : flavor.backgroundColor} simple={mobile} />
+    <IceCube position={ingredient ? [-1.75, 1.05, -.9] : [3.55, .15, 1.5]} scale={ingredient ? .65 : .85} seed={2} reduced={reduced} background={flavor.backgroundColor} />
+    <IceCube position={ingredient ? [1.8, -.8, 1] : [-.15, -1.65, .8]} scale={ingredient ? .5 : .65} seed={4} reduced={reduced} background={flavor.backgroundColor} simple={mobile} />
   </>;
 }

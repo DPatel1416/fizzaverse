@@ -18,6 +18,7 @@ export function HeroSection() {
   const progress = useRef(0);
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    let disposed = false;
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -67,7 +68,17 @@ export function HeroSection() {
         };
       });
     }, hero);
-    return () => ctx.revert();
+    // A direct section URL can be restored before the pin is measured.
+    // Reconcile it once fonts have established the final document geometry.
+    void document.fonts.ready.then(() => {
+      if (disposed) return;
+      ScrollTrigger.refresh();
+      if (location.hash === "#ingredients") {
+        const section = document.getElementById("ingredients");
+        if (section) window.scrollTo({ top: section.getBoundingClientRect().top + scrollY - cinematic.sectionShift - 72, behavior: "instant" });
+      }
+    });
+    return () => { disposed = true; ctx.revert(); };
   }, []);
   return (
     <>

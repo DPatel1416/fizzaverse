@@ -12,6 +12,7 @@ import { Studio } from "./World";
 import { SceneBoundary } from "../CanvasRoot";
 import { useCanDrag } from "../useCanDrag";
 import { IngredientBurst } from "./IngredientBurst";
+import { SodaFill } from "./SodaFill";
 
 const smooth = (p: number, a: number, b: number) => MathUtils.smoothstep(p, a, b);
 const unitHeight = 2 * Math.tan(Math.PI / 9) * 10;
@@ -71,6 +72,7 @@ function PersistentCan({ quality, onReady }: { quality: Quality; onReady: () => 
     lidFruit.current?.scale.setScalar(smooth(p, .88, 1) * (destination.opened ? .3 : 0));
   });
   return <>
+    <SodaFill flavor={flavors[index]} />
     <group ref={ref} {...drag.handlers}>
       <CanModel flavor={flavors[index]} quality={quality} lidRef={lid} />
       <group ref={lidFruit} position={[.18, 1.65, 0]} scale={0}><Fruit flavor={flavors[index]} /></group>

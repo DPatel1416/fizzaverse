@@ -14,8 +14,8 @@ Open `http://localhost:3000`. `npm run build` creates a static export in `out/`,
 ## Experience
 
 - Six flavor worlds, original front-facing can artwork, procedural can bodies, lids, pull tabs, rims, instanced condensation, photographic fruit at multiple scene depths, and iridescent bubbles.
-- A pinned hero with one persistent can: center, accelerate through the lens, burst ingredients outward, and settle into a warm orange scene. The timeline reverses with scroll and adds no empty pin spacing. Bubble-lens flavor changes, damped drag interaction, responsive compositions, and reduced-motion support remain available.
-- Interactive ingredients can: drag on two axes, rotate with buttons, separate/close its lid, and reset its view.
+- A pinned hero with one persistent can: center, accelerate through the lens, burst ingredients outward, fill the frame with soda, and settle into a scene colored for the selected drink. The timeline reverses with scroll and adds no empty pin spacing. Bubble-lens flavor changes, damped drag interaction, responsive compositions, and reduced-motion support remain available.
+- The ingredient can opens as it settles and retains quiet drag interaction, without instructional labels or control buttons.
 - A 3D six-can carousel with pointer, horizontal wheel, and keyboard controls.
 - A 12-slot procedural cardboard tray with animated placement and validated variety packs.
 - Shop filters, six statically generated product routes, pack sizes, subscription pricing, nutrition and ingredients, product reviews, search, centered account dialog, mobile navigation, persistent cart, and demo checkout.

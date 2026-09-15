@@ -77,7 +77,7 @@ function FlyingParticles({ mobile }: { mobile: boolean }) {
       const a = particle.angle;
       dummy.position.set(
         MathUtils.lerp(Math.cos(a) * particle.radius * blast, cx + Math.cos(a) * (1.5 + i % 3 * .25), settle),
-        MathUtils.lerp(Math.sin(a) * particle.radius * blast, cy + Math.sin(a) * 1.8 + Math.sin(clock.elapsedTime * .6 + i) * .1, settle),
+        MathUtils.lerp(Math.sin(a) * particle.radius * blast, cy + ((Math.sin(a) * 1.8 + clock.elapsedTime * .13 + 20) % 4.8) - 2.4, settle),
         MathUtils.lerp(-2 + particle.z * blast, -1 + Math.sin(a) * 1.5, settle),
       );
       dummy.rotation.set(a + blast, a * .7, a + clock.elapsedTime * .08);
