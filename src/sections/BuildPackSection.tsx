@@ -5,6 +5,7 @@ import { Minus, Plus, ArrowRight, Shuffle } from "lucide-react";
 import { usePack } from "@/store/packStore";
 import { useCart } from "@/store/cartStore";
 import { flavors, getFlavor } from "@/data/flavors";
+import { NearViewport } from "@/components/ui/NearViewport";
 const Scene = dynamic(
   () => import("@/three/scenes/SectionScenes").then((m) => m.PackScene),
   { ssr: false },
@@ -18,30 +19,30 @@ export function BuildPackSection() {
   return (
     <section id="build-pack" className="build-section">
       <div className="build-visual">
-        <span className="eyebrow">03 / YOUR BOX. YOUR RULES.</span>
+        <span className="eyebrow">03 / THE MIX TAPE</span>
         <h2>
-          BUILD YOUR
+          ALL YOUR
           <br />
-          OWN <span>FIZZ BOX.</span>
+          <span>HEAVY HITTERS.</span>
         </h2>
-        <Scene selection={selection} />
+        <NearViewport><Scene selection={selection} /></NearViewport>
         <div className="box-stamp">
-          PACKED WITH
+          THE 12-CAN COLLECTION
           <br />
-          <strong>GOOD DAYS.</strong> ☺
+          <strong>COMPILED BY YOU.</strong>
         </div>
       </div>
       <div className="pack-controls">
-        <span className="eyebrow">A LITTLE OF THIS. A LOT TO LOVE.</span>
+        <span className="eyebrow">SIX FLAVORS. TWELVE OPEN SLOTS.</span>
         <h3>
-          Mix it. Match it.
+          Your taste.
           <br />
-          Make it yours.
+          Your tracklist.
         </h3>
         <p>
-          Pick 12 cans of whatever makes you happy.
+          Put your favorites on repeat, or try all six.
           <br />
-          All your favorites. One very good box.
+          Fill your box with any 12 cans for $24.
         </p>
         <div className="pack-progress">
           <strong aria-live="polite">

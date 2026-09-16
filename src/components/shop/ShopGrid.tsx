@@ -34,7 +34,7 @@ export function ShopGrid() {
         <span>{list.length} FLAVORS TO LOVE</span>
       </div>
       <div className="shop-grid">
-        {list.map((f, i) => (
+        {list.map((f) => (
           <article
             key={f.id}
             className="product-card"
@@ -52,7 +52,7 @@ export function ShopGrid() {
             >
               <span className="card-counter">0{flavors.indexOf(f) + 1}</span>
               <span className="card-tag">
-                {i === 0 ? "A LITTLE SUNSHINE" : "FEEL-GOOD FIZZ"}
+                {f.nutrition.calories} CAL / 355 mL
               </span>
               <div className="card-circle" />
               <CanArt flavor={f} />
@@ -84,9 +84,9 @@ export function ShopGrid() {
         <div>
           <span className="eyebrow">WHY PICK JUST ONE?</span>
           <h2>
-            YOUR VERY OWN
+            YOUR TASTE.
             <br />
-            BOX OF HAPPY.
+            YOUR TRACKLIST.
           </h2>
           <p>Mix and match 12 cans. Make it a good one.</p>
         </div>

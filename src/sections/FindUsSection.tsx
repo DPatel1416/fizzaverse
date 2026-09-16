@@ -6,11 +6,11 @@ export function FindUsSection() {
   const [result, setResult] = useState("");
   return (
     <section id="find-us" className="find-section">
-      <span className="eyebrow">05 / GOOD FIZZ IS CLOSER THAN YOU THINK</span>
+      <span className="eyebrow">05 / TAKE IT TO GO</span>
       <h2>
         FIND YOUR <span>FIZZ.</span>
       </h2>
-      <p>Let’s make your next grocery run a little brighter.</p>
+      <p>Your next cold can, a little closer.</p>
       <form
         onSubmit={(e) => {
           e.preventDefault();

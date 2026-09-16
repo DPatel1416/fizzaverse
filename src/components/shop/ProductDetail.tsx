@@ -52,7 +52,7 @@ export function ProductDetail({ flavor: f }: { flavor: Flavor }) {
           </div>
         </div>
         <div className="product-content">
-          <span className="eyebrow">SPARKLING SODA. BRIGHTER DAYS.</span>
+          <span className="eyebrow">FIZZA FLAVOR DEPT. / 355 mL</span>
           <h1>
             {f.name.split(" ")[0]}
             <br />

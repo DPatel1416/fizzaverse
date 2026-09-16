@@ -1,86 +1,33 @@
 "use client";
 import dynamic from "next/dynamic";
-import {
-  Component,
-  useEffect,
-  useState,
-  useRef,
-  type ReactNode,
-  type RefObject,
-} from "react";
+import { Component, useEffect, useState, useRef, useCallback, type ReactNode, type RefObject } from "react";
 import type { Flavor } from "@/data/flavors";
 import { CanArt } from "@/components/ui/CanArt";
 const World = dynamic(() => import("./scenes/World"), { ssr: false });
-export class SceneBoundary extends Component<
-  { children: ReactNode; fallback: ReactNode },
-  { failed: boolean }
-> {
+export class SceneBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
   state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    return this.state.failed ? this.props.fallback : this.props.children;
-  }
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() { return this.state.failed ? this.props.fallback : this.props.children; }
 }
-export function CanvasRoot({
-  flavor,
-  mode = "hero",
-  progress,
-}: {
-  flavor: Flavor;
-  mode?: "hero" | "product";
-  progress?: RefObject<number>;
-}) {
-  const [supported, setSupported] = useState<boolean | null>(null);
+export function CanvasRoot({ flavor, mode = "hero", progress }: { flavor: Flavor; mode?: "hero" | "product"; progress?: RefObject<number> }) {
+  const [enabled, setEnabled] = useState(false);
   const [ready, setReady] = useState(false);
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const onReady = useCallback(() => setReady(true), []);
   useEffect(() => {
-    const c = document.createElement("canvas");
-    const gl = c.getContext("webgl2");
-    setSupported(Boolean(gl));
-    gl?.getExtension("WEBGL_lose_context")?.loseContext();
-    const observer = new IntersectionObserver(([entry]) =>
-      setActive(entry.isIntersecting),
-    );
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      setActive(entry.isIntersecting);
+      if (entry.isIntersecting) timer = setTimeout(() => setEnabled(true), 150);
+      else clearTimeout(timer);
+    }, { rootMargin: "100px" });
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    return () => { clearTimeout(timer); observer.disconnect(); };
   }, []);
-  const fallback = (
-    <div className={`scene-fallback fallback-${mode}`}>
-      <CanArt flavor={flavor} />
-    </div>
-  );
-  return (
-    <div
-      ref={ref}
-      className={`world-canvas world-${mode}`}
-      aria-label={`Interactive ${flavor.name} soda can. Drag to rotate.`}
-      role="img"
-    >
-      {supported === false ? (
-        fallback
-      ) : (
-        <SceneBoundary fallback={fallback}>
-          {supported && (
-            <World
-              flavor={flavor}
-              mode={mode}
-              active={active}
-              progress={progress}
-              onReady={() => setReady(true)}
-            />
-          )}
-        </SceneBoundary>
-      )}
-      {!ready && supported !== false && (
-        <div className="fizz-loader">
-          <span>FIZZA</span>
-          <small>OPENING YOUR FIZZ…</small>
-          <i>◌ ◌ ◌</i>
-        </div>
-      )}
-    </div>
-  );
+  const fallback = <div className={`scene-fallback fallback-${mode}`}><CanArt flavor={flavor} /></div>;
+  return <div ref={ref} className={`world-canvas world-${mode}`} aria-label={`${flavor.name} soda can. Drag to rotate when loaded.`} role="img">
+    {!ready && fallback}
+    {enabled && <SceneBoundary fallback={fallback}><World flavor={flavor} mode={mode} active={active} progress={progress} onReady={onReady} /></SceneBoundary>}
+  </div>;
 }

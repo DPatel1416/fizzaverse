@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef } from "react";
-import type { ThreeEvent } from "@react-three/fiber";
+import { useThree, type ThreeEvent } from "@react-three/fiber";
 import { MathUtils } from "three";
 
 // Interaction is independent of the render loop so each scene owns its motion.
 export function useCanDrag(resetKey = 0) {
+  const invalidate = useThree(s => s.invalidate);
   const state = useRef({
     active: false,
     startX: 0,
@@ -29,6 +30,7 @@ export function useCanDrag(resetKey = 0) {
     [],
   );
   const release = (event: ThreeEvent<PointerEvent>) => {
+    invalidate();
     state.current.active = false;
     (event.target as unknown as Element).releasePointerCapture?.(
       event.pointerId,
@@ -47,6 +49,7 @@ export function useCanDrag(resetKey = 0) {
     },
     handlers: {
       onPointerDown(event: ThreeEvent<PointerEvent>) {
+        invalidate();
         event.stopPropagation();
         const s = state.current;
         s.active = true;
@@ -65,6 +68,7 @@ export function useCanDrag(resetKey = 0) {
       onPointerMove(event: ThreeEvent<PointerEvent>) {
         const s = state.current;
         if (!s.active) return;
+        invalidate();
         event.stopPropagation();
         const now = performance.now();
         s.yaw = MathUtils.clamp(

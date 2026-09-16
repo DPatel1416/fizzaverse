@@ -1,46 +1,35 @@
-# FIZZA
+# FIZZA — Fruit with volume
 
-A complete local-first demo storefront for a fictional soda brand, built with Next.js 16.3.4, React 19, strict TypeScript, Tailwind CSS, React Three Fiber / Three.js, Drei, GSAP ScrollTrigger, Lenis, Framer Motion, and Zustand.
+A fictional soda storefront built with Next.js 16.3.4, React 19, TypeScript, React Three Fiber, and Zustand. The static export is in `out/`.
 
-## Run
+## Develop and validate
 
-```sh
-npm ci
-npm run dev
-```
+- `npm run dev` — local preview at http://localhost:3000
+- `npm run typecheck` — TypeScript validation
+- `npm test` — eight catalog, pricing, pack, cart, and demo-checkout tests
+- `npm run build` — production static export
 
-Open `http://localhost:3000`. `npm run build` creates a static export in `out/`, ready for a static host. The checked-in assets work offline; no GLB, remote font, or environment-map download is required.
+## Design and rendering
 
-## Experience
+The Flavor Dept. design uses a contained liquid-world hero, numbered flavor selectors, a nutrition ledger, a six-flavor field guide, and a 12-can mix builder. Flavor selection updates the hero, ingredient facts, and tasting notes together. Shop, product, cart, search, account, locator, and demo checkout remain available.
 
-- Six flavor worlds, original front-facing can artwork, procedural can bodies, lids, pull tabs, rims, instanced condensation, photographic fruit at multiple scene depths, and iridescent bubbles.
-- A pinned hero with one persistent can: center, accelerate through the lens, burst ingredients outward, fill the frame with soda, and settle into a scene colored for the selected drink. The timeline reverses with scroll and adds no empty pin spacing. Bubble-lens flavor changes, damped drag interaction, responsive compositions, and reduced-motion support remain available.
-- The ingredient can opens as it settles and retains quiet drag interaction, without instructional labels or control buttons.
-- A 3D six-can carousel with pointer, horizontal wheel, and keyboard controls.
-- A 12-slot procedural cardboard tray with animated placement and validated variety packs.
-- Shop filters, six statically generated product routes, pack sizes, subscription pricing, nutrition and ingredients, product reviews, search, centered account dialog, mobile navigation, persistent cart, and demo checkout.
-- Native modal focus management, Escape dismissal, visible focus indicators, semantic content outside WebGL, and artwork fallbacks for renderer errors.
+The hero renders can artwork in the initial HTML and keeps it visible until the live scene has rendered. Its single WebGL canvas loads near the viewport. Flavor changes and dragging request frames only until the can settles; hidden tabs and offscreen scenes pause. The ingredients and flavor catalog require no WebGL. The pack scene mounts within 300px of the viewport and stops requesting frames once cans settle. Native page scrolling has no JavaScript animation loop.
+
+Can labels are shared by flavor and resolution: 1024px on desktop and 512px for low-quality/pack models, instead of a separate 2048px label per can. Low-detail labels clear the body facets to avoid depth interference. Droplets use opacity instead of a scene transmission pass. Studio reflections are baked once at 64px. Reduced-motion preferences disable flavor spins and pack-placement motion. WebGL failures retain artwork and functional product controls.
 
 ## Project map
 
-`src/data/flavors.ts` is the flavor catalog and pricing source. `src/three/models/CanModel.tsx` is the reusable can asset boundary; replace its meshes with a GLB without changing the storefront. `src/three/materials/label.ts` generates replaceable canvas label textures. `scripts/generate-art.ts` generates standalone SVG product art. `src/lib/quality.ts` owns rendering profiles. Cart and pack state live in `src/store/`.
+- `src/data/flavors.ts` — catalog, nutrition, ingredients, and pricing
+- `src/sections/` — homepage
+- `src/three/scenes/World.tsx` — demand-rendered hero and product can
+- `src/three/scenes/SectionScenes.tsx` — pack scene and retained legacy scene exports
+- `src/components/ui/NearViewport.tsx` — deferred scene mounting
+- `src/store/` — device-local cart, flavor, and pack state
 
-The scene combines a generated cinematic environment plate, camera-facing photographic fruit cutouts, and live 3D cans, ice, and particles. Fruit uses one alpha atlas across all flavors; it is photographic artwork positioned in 3D, not a scanned or freely rotatable fruit model. The liquid-canopy background has subtle pointer parallax and a scroll-driven camera push. Studio light panels and the environment plate create reflections. Profiled can shoulders, rolled seams, a recessed opening, an extruded pull tab, brushed aluminum, fine condensation, traveling water beads, and soft descending mist create the chilled finish. Ice refracts the environment through small buffers on desktop, with transparent physical materials on mobile. The scroll handoff keeps one persistent can, opens its lid as the fruit settles, and fills the frame with a photographic soda texture, animated refraction, a curved meniscus, and two depths of rising carbonation. The soda follows the selected flavor. This is a photographic shader illusion, not a fluid simulation. Offscreen scenes pause, rendering resolution adapts, and reduced-motion preferences disable the traveling can and large sweeps. Generated artwork is served as compressed WebP; original source images and exact prompts are retained.
-
-## Validation
-
-```sh
-npm run typecheck
-npm test
-npm run build
-```
-
-The tests cover catalog integrity, subscription/pack prices, merging cart lines, invalid inputs, quantity bounds, the 12-can constraint, custom-box merging, shipping thresholds, and demo order completion. Browser review covers desktop/mobile compositions, centered dialogs, product selections, persistence after reload, pack building, checkout, and the pinned transition, flavor-colored soda fill, and ingredients-can dragging.
+Legacy cinematic modules remain in source for reference but are not imported by the homepage. Generated WebP artwork is local; no external font or model download is required.
 
 ## Demo boundaries
 
-FIZZA is fictional. Checkout creates a local demo order only; it never charges a card or ships a product. Account history is device-local, not authenticated. Subscription choices demonstrate pricing only. Reviews last for the current product visit. Newsletter interest is stored locally, not emailed. Retailers are explicitly illustrative, not verified stockists. Real commerce requires server-authoritative prices, inventory, tax/shipping services, authentication, payment processing and webhooks, an email provider, and a real store-locator source.
+FIZZA is fictional. Checkout stores a local demo order and never charges a card or ships a product. Accounts and orders are device-local. Subscription choices demonstrate pricing. Reviews last for the current product visit. Newsletter interest is saved locally, not emailed. Retailers are illustrative, not verified stockists. Real commerce requires authoritative server pricing, inventory, authentication, payments, and fulfillment.
 
-The site registers a small WebMCP surface when supported: read the cart, select a homepage flavor, and add a pack to the demo cart. These share the same validated actions as the visible interface.
-
-Rendering quality adapts to device size and measured performance. A 60 FPS result is hardware-dependent; no universal frame-rate guarantee is made.
+Performance improvements reduce scene count, texture memory, and idle GPU work. Load time and frame rate remain device- and network-dependent; no universal speed score is claimed.

@@ -8,16 +8,16 @@ export default function Shop() {
   return (
     <main id="main" className="shop-page">
       <div className="shop-heading">
-        <span className="eyebrow">SIP SOMETHING HAPPY.</span>
+        <span className="eyebrow">FIZZA FLAVOR DEPT. / THE COLLECTION</span>
         <h1>
-          ALL FIZZ.
+          PICK YOUR
           <br />
-          <span>NO BORING.</span>
+          <span>HEAVY HITTER.</span>
         </h1>
         <p>
-          Your new favorite flavor is in here.
+          Six flavors. Twelve cans. $24 a pack.
           <br />
-          Probably more than one.
+          Start with a favorite, or mix your own.
         </p>
       </div>
       <ShopGrid />

@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, useEffect, Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import { Group, MathUtils } from "three";
 import { flavors, getFlavor } from "@/data/flavors";
@@ -17,9 +17,11 @@ import { ChilledAtmosphere, FlavorLight } from "./Atmosphere";
 function SceneCanvas({
   children,
   camera = [0, 0, 10],
+  demand = false,
 }: {
   children: React.ReactNode;
   camera?: [number, number, number];
+  demand?: boolean;
 }) {
   const [active, setActive] = useState(true);
   const [low, setLow] = useState(false);
@@ -50,8 +52,8 @@ function SceneCanvas({
         <Canvas
           camera={{ position: camera, fov: 40 }}
           dpr={[1, low ? 1 : 1.4]}
-          frameloop={active && visible ? "always" : "never"}
-          gl={{ antialias: !low, alpha: true }}
+          frameloop={active && visible ? (demand ? "demand" : "always") : "never"}
+          gl={{ antialias: true, alpha: true }}
         >
           <Suspense fallback={null}>
             <Studio />
@@ -287,14 +289,23 @@ function Tray({ selection }: { selection: string[] }) {
 }
 function SlotCan({ id, x, z }: { id: string; x: number; z: number }) {
   const ref = useRef<Group>(null);
+  const invalidate = useThree(s => s.invalidate);
+  const reduced = useRef(false);
+  useEffect(() => {
+    const media = matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => { reduced.current = media.matches; invalidate(); };
+    update(); media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, [invalidate]);
   useFrame((_, d) => {
     if (ref.current)
-      ref.current.position.y = MathUtils.damp(
+      ref.current.position.y = reduced.current ? .02 : MathUtils.damp(
         ref.current.position.y,
         0.02,
         7,
         d,
       );
+    if (ref.current && Math.abs(ref.current.position.y - .02) > .001) invalidate();
   });
   return (
     <group ref={ref} position={[x, 2, z]} scale={0.67}>
@@ -304,7 +315,7 @@ function SlotCan({ id, x, z }: { id: string; x: number; z: number }) {
 }
 export function PackScene({ selection }: { selection: string[] }) {
   return (
-    <SceneCanvas camera={[0, 4.7, 7.8]}>
+    <SceneCanvas camera={[0, 4.7, 7.8]} demand>
       <Tray selection={selection} />
     </SceneCanvas>
   );

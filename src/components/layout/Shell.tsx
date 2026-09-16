@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import Lenis from "lenis";
 import { MotionConfig } from "framer-motion";
 import { useCart } from "@/store/cartStore";
 import { flavors, money } from "@/data/flavors";
@@ -36,19 +35,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     setMounted(true);
-    const onScroll = () => setScrolled(window.scrollY > 100);
+    let pastHero = false;
+    const onScroll = () => {
+      const next = window.scrollY > 100;
+      if (next !== pastHero) { pastHero = next; setScrolled(next); }
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    let lenis: Lenis | undefined;
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      lenis = new Lenis({
-        autoRaf: true,
-        anchors: false,
-        duration: 1.05,
-        prevent: (node) => Boolean(node.closest("dialog")),
-      });
-    }
-    // Own same-page anchors before Next's Link handler performs its native
-    // jump. Otherwise Lenis can calculate a second target from stale scroll.
+    // Native scrolling needs no perpetual animation loop.
     const onAnchor = (event: MouseEvent) => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       const link = (event.target as Element).closest<HTMLAnchorElement>("a[href]");
@@ -63,14 +57,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
       for (let node: HTMLElement | null = target; node; node = node.offsetParent as HTMLElement | null) top += node.offsetTop;
       setPanel(null);
       history.pushState(null, "", url.hash);
-      if (lenis) lenis.scrollTo(Math.max(0, top - 72), { force: true });
-      else window.scrollTo({ top: Math.max(0, top - 72), behavior: "instant" });
+      window.scrollTo({ top: Math.max(0, top - (innerWidth < 768 ? 72 : 88)), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
     };
     window.addEventListener("click", onAnchor, true);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("click", onAnchor, true);
-      lenis?.destroy();
     };
   }, []);
   useEffect(() => {
