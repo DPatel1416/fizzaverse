@@ -11,11 +11,11 @@ export function Footer() {
     <footer className="footer">
       <div className="footer-top">
         <div className="newsletter">
-          <span className="eyebrow">DISPATCHES FROM THE FLAVOR DEPT.</span>
+          <span className="eyebrow">A LITTLE SOMETHING GOOD.</span>
           <h2>
-            THE NEXT
+            GET FIZZA
             <br />
-            FLAVOR DROP.
+            IN YOUR INBOX.
           </h2>
           <form
             onSubmit={(e) => {
@@ -43,7 +43,7 @@ export function Footer() {
             </button>
           </form>
           <p className="form-message" role="status">
-            {message || "New flavors, tasting notes, and first dibs. Demo signup."}
+            {message || "Fresh flavors. Happy news. The occasional good pun."}
           </p>
         </div>
         <div className="footer-links">
@@ -69,8 +69,8 @@ export function Footer() {
         FIZZA<span>✳</span>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} FIZZA FLAVOR DEPT.</span>
-        <span>A FICTIONAL SODA BRAND. FRUIT WITH VOLUME.</span>
+        <span>© {new Date().getFullYear()} FIZZA. BRIGHTER DAYS AHEAD.</span>
+        <span>A FICTIONAL SODA BRAND. MADE FOR GOOD VIBES.</span>
         <button onClick={() => setInfo("PRIVACY")}>PRIVACY</button>
       </div>
       <Dialog

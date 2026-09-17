@@ -1,8 +1,50 @@
-import { ArrowUpRight } from "lucide-react";
+"use client";
+import { ArrowUpRight, Smile } from "lucide-react";
 import Link from "next/link";
 export function StorySection() {
-  return <section id="story" className="story-section field-story">
-    <div className="story-photo"><img src="/images/fizza-picnic.webp" alt="FIZZA cans on ice, fresh fruit, and friends sharing a picnic" loading="lazy" decoding="async" width={1536} height={1024} /><span className="photo-caption">FIELD NOTES / BEST SHARED, ICE COLD.</span></div>
-    <div className="story-copy"><span className="eyebrow">04 / OFF THE CLOCK. OPEN A CAN.</span><h2>LESS SCROLL.<br /><span>MORE SIP.</span></h2><p>Take the long lunch. Bring the extra chair. Open the flavor you’ve never tried.</p><p>FIZZA is fruit juice, cane sugar, and a little carbonation for the unplanned part of your day. Six flavors. No wrong place to start.</p><Link className="button ink" href="/#build-pack">BRING A BOX TO THE TABLE <ArrowUpRight size={18} /></Link><span className="story-signoff">With fizz, FIZZA.</span></div>
-  </section>;
+  return (
+    <section id="story" className="story-section">
+      <div className="story-photo">
+        <img
+          src="/images/fizza-picnic.webp"
+          alt="Pink FIZZA cans, fresh fruit, and friends sharing a sunny picnic"
+          loading="lazy"
+          width={1536}
+          height={1024}
+        />
+        <span className="photo-sticker">
+          GOOD DAYS
+          <br />
+          TASTE LIKE THIS.
+          <Smile size={36} />
+        </span>
+      </div>
+      <div className="story-copy">
+        <span className="eyebrow">04 / A FRESH TAKE ON HAPPY</span>
+        <h2>
+          WE THOUGHT
+          <br />
+          SODA COULD
+          <br />
+          BE{" "}
+          <span>
+            WAY
+            <br />
+            MORE FUN.
+          </span>
+        </h2>
+        <p>
+          So we made it happen. Bright fruit flavors. The perfect amount of
+          bubbles. A can that looks as good as your day is about to feel.
+        </p>
+        <p>
+          FIZZA is our little reminder to take the scenic route, say yes to the
+          picnic, and find the good in the everyday.
+        </p>
+        <Link className="button outline" href="/shop">
+          HERE’S TO BRIGHTER DAYS <ArrowUpRight size={18} />
+        </Link>
+      </div>
+    </section>
+  );
 }

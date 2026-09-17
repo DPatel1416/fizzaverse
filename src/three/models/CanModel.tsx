@@ -39,8 +39,9 @@ export function CanModel({
 }) {
   const fruitAtlas = useTexture(FRUIT_ATLAS);
   const cold = useMemo(() => chilledSurface(), []);
-  const texture = useMemo(() => makeLabel(flavor, fruitAtlas.image, quality === "low" ? 512 : 1024), [flavor, fruitAtlas.image, quality]);
-  const n = quality === "high" ? 80 : quality === "medium" ? 64 : 40;
+  const texture = useMemo(() => makeLabel(flavor, fruitAtlas.image), [flavor, fruitAtlas.image]);
+  useEffect(() => () => texture.dispose(), [texture]);
+  const n = quality === "high" ? 128 : quality === "medium" ? 80 : 56;
   const labelGeometry = useMemo(() => {
     const geometry = new LatheGeometry(profile.slice(3, -2), n);
     const uv = geometry.attributes.uv, pos = geometry.attributes.position;
@@ -72,8 +73,7 @@ export function CanModel({
       <latheGeometry args={[profile,n]} />
       {metal}
     </mesh>
-    {/* The rotated label must clear the body facets at lower polygon counts. */}
-    <mesh geometry={labelGeometry} rotation={[0,-.9,0]} scale={quality === "low" ? [1.01,1,1.01] : [1.004,1,1.004]}>
+    <mesh geometry={labelGeometry} rotation={[0,-.9,0]} scale={[1.002,1,1.002]}>
       <meshPhysicalMaterial map={texture} bumpMap={condensation ? cold.bump : undefined} bumpScale={.006}
         roughnessMap={condensation ? cold.roughness : undefined} metalness={.28} roughness={.34}
         clearcoat={1} clearcoatRoughness={.13} envMapIntensity={.85} />
@@ -170,7 +170,7 @@ function Condensation({ count, quality, reduced }: { count: number; quality: Qua
     moving.current.instanceMatrix.needsUpdate = true;
   });
   const water = <meshPhysicalMaterial color="#f4fcff" metalness={0} roughness={.035} ior={1.333}
-    transmission={0} transparent opacity={.48} thickness={.015} clearcoat={1} clearcoatRoughness={.025} envMapIntensity={.75} />;
+    transmission={.98} thickness={.015} clearcoat={1} clearcoatRoughness={.025} envMapIntensity={.75} />;
   return <>
     <instancedMesh ref={ref} args={[undefined,undefined,count]} frustumCulled={false} raycast={() => {}}>
       <sphereGeometry args={[1,quality === "low" ? 12 : 16,quality === "low" ? 8 : 12]} />

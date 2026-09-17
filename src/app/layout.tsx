@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Shell } from "@/components/layout/Shell";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: { default: "FIZZA — Fruit with volume.", template: "%s | FIZZA" },
+  title: { default: "FIZZA — Soda, but way more fun.", template: "%s | FIZZA" },
   description:
-    "Sweet. Sharp. Loud. Explore six fruit-forward FIZZA sodas, find your flavor, and mix your own 12-can collection.",
+    "Big flavor. Bright energy. Zero boring. Explore six delicious FIZZA sodas and build your own box of good days.",
   metadataBase: new URL("https://fizzaverse-soda.mythkikiop.chatgpt.site"),
 };
 export default function RootLayout({
