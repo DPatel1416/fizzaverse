@@ -116,7 +116,7 @@ export function HeroSection() {
         } as React.CSSProperties
       }
     >
-      <div className="hero-sky"><img ref={plate} className="cinematic-plate" src="/images/cinematic-world-v2.webp" alt="" width={1672} height={941} fetchPriority="high" /></div>
+      <div className="hero-sky"><img ref={plate} className="cinematic-plate" src="/images/fizz-playground.webp" alt="" width={1672} height={941} fetchPriority="high" /></div>
       <div key={index} className="flavor-wipe" />
       <CanvasRoot flavor={flavor} progress={progress} />
       <div className="hero-vignette" />

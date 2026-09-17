@@ -303,7 +303,7 @@ img {
 }
 .hero-scribble {
   position: absolute;
-  top: 25%;
+  top: 14%;
   right: 4%;
   font-family: var(--font-display);
   font-size: 22px;
@@ -372,9 +372,13 @@ img {
   justify-content: space-evenly;
   gap: 10px;
   flex: 1;
+  min-width: 0;
 }
 .dock-flavor {
   width: 95px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 95px;
   min-height: 144px;
   padding: 9px 7px;
   position: relative;
@@ -426,7 +430,7 @@ img {
   padding: 22px 18px;
   border: 1px solid #fff7e5aa;
   border-radius: 19px;
-  background: #fff6e21a;
+  background: #28101d66;
   backdrop-filter: blur(12px);
 }
 .story-teaser > span {
@@ -530,6 +534,9 @@ img {
   }
   .story-teaser {
     max-width: 200px;
+    flex: 0 0 180px;
+    gap: 8px;
+    padding: 18px 12px;
   }
   .hero-scribble {
     right: 3%;
@@ -564,8 +571,10 @@ img {
   }
   .hero-copy {
     left: 6%;
-    top: 126px;
+    top: 110px;
     width: 88%;
+    display: flex;
+    flex-direction: column;
   }
   .eyebrow {
     font-size: 8px;
@@ -584,6 +593,7 @@ img {
   .hero-actions {
     gap: 10px;
     flex-wrap: wrap;
+    order: 2;
   }
   .hero-actions .button {
     font-size: 9px;
@@ -591,7 +601,13 @@ img {
     min-height: 46px;
   }
   .hero-footnote {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    order: 1;
+    font-size: 8px;
+    letter-spacing: .2px;
+    gap: 6px;
+    margin: -4px 0 12px;
   }
   .world-canvas.world-hero {
     inset: 280px -150px 90px -150px;
@@ -630,7 +646,7 @@ img {
     margin-bottom: 6px;
   }
   .dock-flavor > span {
-    font-size: 7px;
+    font-size: 8px;
     letter-spacing: 0.2px;
   }
   .dock-flavor i {
@@ -2997,15 +3013,18 @@ body {
 .cinematic-plate {
   width: 100%; height: 100%; object-fit: cover;
   transform: scale(1.04); transform-origin: center;
-  filter: brightness(1.12) saturate(1.04);
   will-change: transform;
 }
 .hero-vignette {
-  background: linear-gradient(90deg, #520c252b, transparent 68%), linear-gradient(0deg, #51112455, transparent 24%);
+  background:
+    linear-gradient(90deg, #28101d4d, transparent 64%),
+    linear-gradient(180deg, #28101d66, transparent 22%, transparent 68%, #28101d99);
 }
 @media (max-width: 767px) {
   .cinematic-plate { object-position: 57% center; }
-  .hero-vignette { background: linear-gradient(180deg, #6b123940, #80103532 38%, transparent 60%, #50122c55); }
+  .hero-vignette {
+    background: linear-gradient(180deg, #28101d66, #28101d40 38%, transparent 60%, #28101d99);
+  }
 }
 @media (max-width: 767px) { .flavor-wipe { backdrop-filter: none; } }
 @media (prefers-reduced-motion: reduce) {
