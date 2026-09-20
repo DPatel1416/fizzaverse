@@ -123,7 +123,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       {children}
-      <Footer />
+      <Footer includeLocator={pathname === "/"} />
       <CartDrawer />
       <Dialog
         open={panel === "search"}
