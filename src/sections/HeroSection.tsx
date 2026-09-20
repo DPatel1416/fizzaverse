@@ -135,7 +135,7 @@ export function HeroSection() {
           <Link className="button primary" href="/shop">
             SHOP THE FIZZ <MoveRight size={21} />
           </Link>
-          <a className="button outline" href="#flavors">
+          <a className="button button-outline" href="#flavors">
             EXPLORE FLAVORS <ArrowUpRight size={18} />
           </a>
         </div>

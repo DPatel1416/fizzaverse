@@ -283,7 +283,7 @@ img {
   background: var(--yellow);
   color: #302426;
 }
-.outline {
+.button-outline {
   border: 1px solid currentColor;
 }
 .hero-footnote {
@@ -610,7 +610,7 @@ img {
     margin: -4px 0 12px;
   }
   .world-canvas.world-hero {
-    inset: 280px -150px 90px -150px;
+    inset: 310px -150px 90px -150px;
   }
   .hero-scribble {
     top: 480px;
@@ -2862,7 +2862,7 @@ body {
   color: #fff8ed;
   text-shadow: 0 1px 12px #92173a50;
 }
-.hero-actions .outline {
+.hero-actions .button-outline {
   background: #bd294431;
   backdrop-filter: blur(6px);
 }
@@ -2933,11 +2933,12 @@ body {
 }
 @media (min-width: 768px) {
   .hero-copy {
-    top: 21%;
+    top: 18%;
   }
   .hero h1 {
-    font-size: clamp(70px, min(8vw, 11.7svh), 124px);
+    font-size: clamp(70px, min(8vw, 10.2svh), 124px);
   }
+  .world-canvas.world-hero { bottom: 150px; }
 }
 @media (max-width: 767px) {
   .ingredient-interaction > span {

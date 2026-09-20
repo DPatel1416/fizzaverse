@@ -15,9 +15,9 @@ import { FlavorEnvironment } from "../environments/FlavorEnvironment";
 import { BubbleSystem } from "../particles/BubbleSystem";
 import { useCanDrag } from "../useCanDrag";
 import { cinematic } from "../cinematicState";
-import { ChilledAtmosphere } from "./Atmosphere";
+import { FlavorLight } from "./Atmosphere";
 export function Studio() {
-  const photographicLight = useTexture("/images/cinematic-world-v2.webp");
+  const photographicLight = useTexture("/images/fizz-playground.webp");
   photographicLight.colorSpace = SRGBColorSpace;
   return (
     <>
@@ -219,10 +219,11 @@ export default function World({
             motionIntensity={reduced ? 0 : 1}
           />
           <BubbleSystem
-            count={qualityProfiles[quality].bubbles}
+            count={qualityProfiles[quality].bubbles * 3}
             reduced={reduced}
+            hero={mode === "hero"}
           />
-          <ChilledAtmosphere flavor={flavor} reduced={reduced} mobile={mobile} />
+          <FlavorLight flavor={flavor} reduced={reduced} />
         </PerformanceMonitor>
       </Suspense>
     </Canvas>

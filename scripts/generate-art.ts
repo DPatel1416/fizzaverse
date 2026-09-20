@@ -3,7 +3,11 @@ import { flavors } from "../src/data/flavors";
 mkdirSync("public/cans", { recursive: true });
 mkdirSync("public/labels", { recursive: true });
 for (const f of flavors) {
-  const fruit =
+  const fruit = f.fruitType === "cherry"
+    ? `<g stroke="#476633" stroke-width="3" fill="none"><path d="M112 224Q106 202 131 184Q132 208 139 231"/></g><g fill="#bc2546" stroke="#fff4dc" stroke-width="2"><circle cx="109" cy="232" r="20"/><circle cx="140" cy="239" r="21"/></g><path d="M102 220q-8 4-7 12M133 227q-8 4-7 12" stroke="#ffb7bf" stroke-width="3" fill="none"/>`
+    : f.fruitType === "watermelon"
+    ? `<path d="M101 188L159 253Q120 285 85 249Z" fill="#5c9d50" stroke="#fff4dc" stroke-width="2"/><path d="M101 193L151 250Q120 273 92 247Z" fill="#ffe7b7"/><path d="M101 198L145 248Q121 265 98 245Z" fill="#f25b72"/><g fill="#54262d"><ellipse cx="109" cy="227" rx="2" ry="4" transform="rotate(-20 109 227)"/><ellipse cx="125" cy="243" rx="2" ry="4" transform="rotate(-40 125 243)"/><ellipse cx="110" cy="247" rx="2" ry="3"/></g>`
+    :
     f.fruitType === "grape"
       ? `<g fill="${f.secondaryColor}" stroke="#fff4dc" stroke-width="2">${Array.from({ length: 7 }, (_, i) => `<circle cx="${105 + (i % 3) * 11}" cy="${195 + Math.floor(i / 3) * 15}" r="13"/>`).join("")}</g>`
       : `<ellipse cx="122" cy="232" rx="32" ry="49" fill="${f.accentColor}" stroke="#fff8d5" stroke-width="5"/>${Array.from({ length: 8 }, (_, i) => `<path d="M122 232l${Math.cos((i * Math.PI) / 4) * 28} ${Math.sin((i * Math.PI) / 4) * 44}" stroke="#fff8d5" stroke-width="3"/>`).join("")}`;
