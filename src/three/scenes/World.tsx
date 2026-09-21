@@ -17,7 +17,7 @@ import { useCanDrag } from "../useCanDrag";
 import { cinematic } from "../cinematicState";
 import { FlavorLight } from "./Atmosphere";
 export function Studio() {
-  const photographicLight = useTexture("/images/fizz-playground.webp");
+  const photographicLight = useTexture("/images/fizz-sunny-picnic.webp");
   photographicLight.colorSpace = SRGBColorSpace;
   return (
     <>

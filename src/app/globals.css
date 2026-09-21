@@ -2954,6 +2954,12 @@ body {
     font-size: clamp(70px, min(8vw, 10.2svh), 124px);
   }
   .world-canvas.world-hero { bottom: 150px; }
+  .hero-scribble {
+    top: 32%;
+    color: var(--ink);
+    text-shadow: none;
+  }
+  .scroll-cue { color: var(--ink); }
 }
 @media (max-width: 767px) {
   .ingredient-interaction > span {
@@ -3034,12 +3040,14 @@ body {
 .hero-vignette {
   background:
     linear-gradient(90deg, #28101d4d, transparent 64%),
-    linear-gradient(180deg, #28101d66, transparent 22%, transparent 68%, #28101d99);
+    linear-gradient(180deg, #28101d99, transparent 22%, transparent 68%, #28101d99);
 }
 @media (max-width: 767px) {
-  .cinematic-plate { object-position: 57% center; }
+  .cinematic-plate { object-position: right center; }
   .hero-vignette {
-    background: linear-gradient(180deg, #28101d66, #28101d40 38%, transparent 60%, #28101d99);
+    background:
+      linear-gradient(90deg, #28101d55, transparent 85%),
+      linear-gradient(180deg, #28101d99, #28101d66 38%, transparent 60%, #28101d99);
   }
 }
 @media (max-width: 767px) { .flavor-wipe { backdrop-filter: none; } }
