@@ -12,7 +12,6 @@ export interface Flavor {
   secondaryColor: string;
   accentColor: string;
   backgroundColor: string;
-  canTexture: string;
   fruitType: FruitType;
   ingredients: string[];
   nutrition: { calories: number; sugar: number; sodium: number; carbs: number };
@@ -32,7 +31,6 @@ export const flavors: Flavor[] = [
     secondaryColor: "#ffb3c9",
     accentColor: "#f5f34c",
     backgroundColor: "#ef839b",
-    canTexture: "/labels/strawberry-lemon.svg",
     fruitType: "strawberry",
     ingredients: [
       "Carbonated water",
@@ -58,7 +56,6 @@ export const flavors: Flavor[] = [
     secondaryColor: "#ffd6a2",
     accentColor: "#f7f19c",
     backgroundColor: "#f7af6d",
-    canTexture: "/labels/orange-cream.svg",
     fruitType: "orange",
     ingredients: [
       "Carbonated water",
@@ -83,7 +80,6 @@ export const flavors: Flavor[] = [
     secondaryColor: "#f698a5",
     accentColor: "#f7dc73",
     backgroundColor: "#cf6778",
-    canTexture: "/labels/cherry-cola.svg",
     fruitType: "cherry",
     ingredients: [
       "Carbonated water",
@@ -108,7 +104,6 @@ export const flavors: Flavor[] = [
     secondaryColor: "#b5db99",
     accentColor: "#d6ee78",
     backgroundColor: "#f5a1ae",
-    canTexture: "/labels/watermelon-rush.svg",
     fruitType: "watermelon",
     ingredients: [
       "Carbonated water",
@@ -133,7 +128,6 @@ export const flavors: Flavor[] = [
     secondaryColor: "#d9b7ec",
     accentColor: "#dcef82",
     backgroundColor: "#b493cd",
-    canTexture: "/labels/grape-glow.svg",
     fruitType: "grape",
     ingredients: [
       "Carbonated water",
@@ -158,7 +152,6 @@ export const flavors: Flavor[] = [
     secondaryColor: "#d4e89c",
     accentColor: "#f1f55c",
     backgroundColor: "#aacf81",
-    canTexture: "/labels/lime-spark.svg",
     fruitType: "lime",
     ingredients: [
       "Carbonated water",

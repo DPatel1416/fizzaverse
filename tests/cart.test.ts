@@ -9,7 +9,6 @@ test("all six products have unique routes and complete flavor data", () => {
     assert.deepEqual(f.packSizes, [6, 12, 24]);
     assert.ok(f.ingredients.length > 3);
     assert.ok(f.description);
-    assert.ok(f.canTexture);
   }
 });
 test("pack prices scale and subscription applies exactly 15%", () => {

@@ -1,0 +1,6 @@
+.openai
+qa
+out
+.npm-cache
+*.tar.gz
+*.tsbuildinfo

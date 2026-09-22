@@ -216,6 +216,7 @@ export default function World({
             flavor={flavor}
             quality={quality}
             compact={mobile}
+            centered={mode === "product"}
             motionIntensity={reduced ? 0 : 1}
           />
           <BubbleSystem

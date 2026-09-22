@@ -1,6 +1,6 @@
 # Sunny hero artwork
 
-Generated with the built-in image generation tool. Website asset: `public/images/fizz-sunny-picnic.webp`, 1672 × 941, WebP quality 85. Previous artwork is retained. The soda fill is procedural and does not sample this image.
+Generated with the built-in image generation tool. Website asset: `public/images/fizz-sunny-picnic.webp`, 1672 × 941, WebP quality 85. The soda fill is procedural and does not sample this image.
 
 ## Final prompt
 
