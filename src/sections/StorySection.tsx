@@ -41,7 +41,7 @@ export function StorySection() {
           FIZZA is our little reminder to take the scenic route, say yes to the
           picnic, and find the good in the everyday.
         </p>
-        <Link className="button outline" href="/shop">
+        <Link className="button button-outline" href="/shop">
           HERE’S TO BRIGHTER DAYS <ArrowUpRight size={18} />
         </Link>
       </div>

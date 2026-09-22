@@ -1,8 +1,5 @@
-Generated with the built-in image_gen tool. Final project assets:
-public/images/fruit-atlas.webp
-public/images/cinematic-world.webp
-
-Generated with built-in image_gen, one call per asset. Original generated files preserved.
+Generated artwork used by the site: public/images/fruit-atlas.webp.
+Sunny hero artwork provenance is in design/sunny-hero.md.
 
 FRUIT ATLAS EXACT PROMPT
 Use case: ads-marketing
@@ -20,10 +17,3 @@ Bottom left: one thick lime half/slice with wet translucent pulp and textured gr
 Bottom middle: one juicy lemon wedge.
 Bottom right: a second natural whole ripe strawberry in a different tilt.
 Every subject is extreme high-end beverage-ad MACROPHOTOGRAPHY: warm natural sunlight from upper right, delicate cool fill, wet fresh surfaces, tiny water beads attached to fruit, translucent fruit flesh, realistic fine microtexture, natural asymmetry and irregularity. Rich appetizing colors. Tack-sharp tactile fruit, crisp clean alpha edges. These must look like REAL FOOD photographed with a macro lens, absolutely no toy, illustration, cartoon or simple CGI. No text or logos anywhere. Maintain exact regular grid positions for UV sampling.
-
-ENVIRONMENT PLATE EXACT PROMPT
-Use case: ads-marketing
-Asset type: wide cinematic commercial environment background plate only, 16:9 wide landscape composition preferably 2560x1440 or greater.
-Create a breathtaking photoreal high-end soda advertising environment: immersive rose-red glossy sculptural architectural arches and sweeping cream/golden arches in deep perspective. Brilliant peach-blue sunset sky and soft realistic sunlit clouds glimpsed to the right. Warm late-afternoon sunlight from the upper right, beautiful soft shadow and reflection gradients, tactile glossy ceramic/enamel architecture. The arches have architectural scale and real perspective, never flat graphic circles or toy torus rings.
-Composition: The LEFT 40% is darker rich berry pink, broad visually quiet negative space to later overlay a large white headline. The CENTER-RIGHT remains completely open for a live 3D soda can to be composited later. Put sculptural depth, cream-gold arches and glowing sky predominantly to the right and upper periphery. Small distant lush green foliage visible in the far right background near ground level. Red/pink translucent liquid splash and glossy rippling liquid foreground ONLY along the bottom edge and periphery. A few optical bokeh droplets peripheral, never crowding the central open area. Camera at a dynamic low commercial product angle, cinematic lens, realistic depth, warm red and pink bounce light, vibrant and sophisticated beverage campaign mood.
-Crucial exclusions: NO TEXT, NO LETTERS, NO LOGOS, NO CANS, NO BOTTLES, NO FRUIT, NO UI, NO WEBPAGE SCREENSHOT, NO HEADLINE. Background environment only. Photographic realism, not vector illustration, not a basic CGI scene.

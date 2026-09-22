@@ -1,46 +1,76 @@
 # FIZZA
 
-A complete local-first demo storefront for a fictional soda brand, built with Next.js 16.3.4, React 19, strict TypeScript, Tailwind CSS, React Three Fiber / Three.js, Drei, GSAP ScrollTrigger, Lenis, Framer Motion, and Zustand.
+An interactive soda storefront that combines playful brand design with animated 3D product experiences. Explore six flavors, build a custom variety box, and move through a complete demo shopping flow.
 
-## Run
+## Features
 
-```sh
+- Interactive 3D cans, floating fruit, flavor transitions, and scroll-driven animation.
+- Six product pages with pack selection, nutrition information, and subscription pricing previews.
+- Custom 12-can variety boxes, a persistent cart, and demo checkout.
+- Responsive layouts, reduced-motion support, keyboard navigation, and artwork fallbacks when WebGL is unavailable.
+- Local fonts and optimized artwork without external asset services.
+
+## Technology
+
+Next.js 16, React 19, TypeScript, Tailwind CSS 4, Three.js / React Three Fiber, GSAP, Framer Motion, and Zustand. Lenis provides smooth scrolling.
+
+## Getting started
+
+Use Node.js 24.x and npm.
+
+```bash
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`. `npm run build` creates a static export in `out/`, ready for a static host. The checked-in assets work offline; no GLB, remote font, or environment-map download is required.
+Open [localhost:3000](http://localhost:3000). No API keys or external services are required.
 
-## Experience
+## Commands
 
-- Six flavor worlds, original front-facing can artwork, procedural can bodies, lids, pull tabs, rims, instanced condensation, photographic fruit at multiple scene depths, and iridescent bubbles.
-- A pinned hero with one persistent can: center, accelerate through the lens, burst ingredients outward, fill the frame with soda, and settle into a scene colored for the selected drink. The timeline reverses with scroll and adds no empty pin spacing. Bubble-lens flavor changes, damped drag interaction, responsive compositions, and reduced-motion support remain available.
-- The ingredient can opens as it settles and retains quiet drag interaction, without instructional labels or control buttons.
-- A 3D six-can carousel with pointer, horizontal wheel, and keyboard controls.
-- A 12-slot procedural cardboard tray with animated placement and validated variety packs.
-- Shop filters, six statically generated product routes, pack sizes, subscription pricing, nutrition and ingredients, product reviews, search, centered account dialog, mobile navigation, persistent cart, and demo checkout.
-- Native modal focus management, Escape dismissal, visible focus indicators, semantic content outside WebGL, and artwork fallbacks for renderer errors.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create the production Next.js build |
+| `npm start` | Serve the production build locally |
+| `npm run typecheck` | Check TypeScript types |
+| `npm test` | Run catalog, cart, pricing, and variety-box tests |
 
-## Project map
+Run the type check, tests, and production build before deploying.
 
-`src/data/flavors.ts` is the flavor catalog and pricing source. `src/three/models/CanModel.tsx` is the reusable can asset boundary; replace its meshes with a GLB without changing the storefront. `src/three/materials/label.ts` generates replaceable canvas label textures. `scripts/generate-art.ts` generates standalone SVG product art. `src/lib/quality.ts` owns rendering profiles. Cart and pack state live in `src/store/`.
+## Deploy to Vercel
 
-The scene combines a generated cinematic environment plate, camera-facing photographic fruit cutouts, and live 3D cans, ice, and particles. Fruit uses one alpha atlas across all flavors; it is photographic artwork positioned in 3D, not a scanned or freely rotatable fruit model. Studio light panels and the environment plate create reflections, while shared microdroplet maps and instanced water beads create the chilled can finish. Ice uses small refraction buffers, with a simpler mobile material for secondary cubes. The scroll handoff keeps one persistent can, opens its lid as the fruit settles, and fills the frame with a flavor-colored soda surface. Offscreen scenes pause, rendering resolution adapts, and reduced-motion preferences disable the traveling can and large sweeps. The story photograph is an original generated asset, served as a compressed WebP. The source PNG is retained for future art direction.
+1. Push the project to your Git provider and import the repository in Vercel.
+2. Select **Next.js** as the framework, the repository root as the root directory, and **Node.js 24.x**.
+3. Keep the default install and build settings (`npm ci` and `npm run build`). Leave the output-directory override disabled; Vercel handles the Next.js build.
+4. Deploy. Optionally connect a custom domain in the project's domain settings.
 
-## Validation
+No `vercel.json` is needed. The project uses the standard Next.js deployment model rather than a static `out/` export. See [Vercel's build configuration documentation](https://vercel.com/docs/builds/configure-a-build).
 
-```sh
-npm run typecheck
-npm test
-npm run build
+### Environment variables
+
+`SITE_URL` is optional. Set it to your full production origin, such as `https://your-domain.com`, to override the metadata base URL. Otherwise, the app uses Vercel's `VERCEL_PROJECT_PRODUCTION_URL`, falling back to `http://localhost:3000` for local development. See [Vercel system environment variables](https://vercel.com/docs/environment-variables/system-environment-variables).
+
+An example is provided in `.env.example`. For local configuration, copy it to `.env.local`. Redeploy after changing production environment variables.
+
+## Project structure
+
+```text
+src/app/          Routes, metadata, and global styles
+src/components/   Shared UI, layout, cart, and product components
+src/sections/     Homepage sections
+src/three/        3D scenes, models, materials, and interactions
+src/data/         Flavor catalog and pricing
+src/store/        Client-side cart, pack, and flavor state
+src/lib/          Storage and rendering-quality utilities
+public/           Product artwork and optimized image assets
+scripts/          Product SVG artwork generator
+tests/           Commerce state and validation tests
 ```
 
-The tests cover catalog integrity, subscription/pack prices, merging cart lines, invalid inputs, quantity bounds, the 12-can constraint, custom-box merging, shipping thresholds, and demo order completion. Browser review covers desktop/mobile compositions, centered dialogs, product selections, persistence after reload, pack building, checkout, and the pinned transition, flavor-colored soda fill, and ingredients-can dragging.
+Edit `src/data/flavors.ts` to update the catalog. Can label textures are generated by `src/three/materials/label.ts`; standalone product illustrations can be regenerated with `npx tsx scripts/generate-art.ts`. Artwork provenance is recorded in `docs/` and `design/`.
 
-## Demo boundaries
+## Demo scope
 
-FIZZA is fictional. Checkout creates a local demo order only; it never charges a card or ships a product. Account history is device-local, not authenticated. Subscription choices demonstrate pricing only. Reviews last for the current product visit. Newsletter interest is stored locally, not emailed. Retailers are explicitly illustrative, not verified stockists. Real commerce requires server-authoritative prices, inventory, tax/shipping services, authentication, payment processing and webhooks, an email provider, and a real store-locator source.
+FIZZA is a fictional brand and a portfolio project. Checkout creates a local demo order; it does not process payments or fulfill purchases. Cart and account history are stored on the current device. Subscriptions preview pricing, newsletter entries stay local, and retailer listings are illustrative. There is no authentication, database, payment gateway, or email service.
 
-The site registers a small WebMCP surface when supported: read the cart, select a homepage flavor, and add a pack to the demo cart. These share the same validated actions as the visible interface.
-
-Rendering quality adapts to device size and measured performance. A 60 FPS result is hardware-dependent; no universal frame-rate guarantee is made.
+The cans are procedural 3D models; fruit consists of photographic cutouts positioned in 3D. Rendering quality adapts to the device, and animation performance varies with hardware.

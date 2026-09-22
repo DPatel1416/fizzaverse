@@ -9,34 +9,40 @@ export function Fruit({ flavor, index = 0 }: { flavor: Flavor; index?: number })
   return <PhotographicFruit type={flavor.fruitType} variation={index} />;
 }
 const placements: [number, number, number, number][] = [
-  [0.0, 2.12, -1.1, .95],
-  [3.85, 2.05, -1.8, .78],
-  [4.2, -.7, 1.1, .9],
-  [-4.45, .65, 2.5, 1.0],
-  [2.9, -2.1, -1.8, 0.64],
-  [4.25, 2.9, -4.2, .58],
+  [-.25, 2.15, -.8, .7],
+  [3.75, 2.25, -.8, .64],
+  [4.05, -.35, .2, .72],
+  [-.25, -.65, -.6, .48],
+  [3.2, -2.25, -.8, .58],
+  [.55, -2.6, -.8, .48],
 ];
 const mobilePlacements: [number, number, number, number][] = [
-  [-1.6, 1.65, -2, 0.6],
-  [2.15, 1.4, -1.7, 0.58],
-  [2, -1.55, -1, 0.62],
-  [-1.9, -1.7, -1.8, 0.65],
+  [-1.25, 1.05, -1, .48],
+  [2.05, 1.25, -1, .44],
+  [1.95, -1.65, -.8, .48],
+  [-1.3, -1.7, -1, .48],
+];
+const productPlacements: [number, number, number, number][] = [
+  [-1.6, 1.7, -.8, .48],
+  [1.65, 1.6, -.8, .46],
+  [1.7, -1.45, -.6, .5],
+  [-1.65, -1.55, -.8, .48],
 ];
 export function FlavorEnvironment({
   flavor,
   quality = "medium",
-  density = 1,
   motionIntensity = 1,
   compact = false,
+  centered = false,
 }: {
   flavor: Flavor;
   quality?: Quality;
-  density?: number;
   motionIntensity?: number;
   compact?: boolean;
+  centered?: boolean;
 }) {
   const ref = useRef<Group>(null);
-  const layout = compact ? mobilePlacements : placements;
+  const layout = centered ? productPlacements : compact ? mobilePlacements : placements;
   const fruitScale = flavor.fruitType === "cherry" ? 0.72 : 1;
   const count = Math.min(
     layout.length,
@@ -67,7 +73,7 @@ export function FlavorEnvironment({
   });
   return (
     <group ref={ref}>
-      {layout.slice(0, Math.floor(count * density)).map((p, i) => (
+      {layout.slice(0, count).map((p, i) => (
         <group
           key={i}
           position={[p[0], p[1], p[2]]}

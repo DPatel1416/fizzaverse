@@ -1,16 +1,17 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { flavors } from "../src/data/flavors";
 mkdirSync("public/cans", { recursive: true });
-mkdirSync("public/labels", { recursive: true });
+
 for (const f of flavors) {
-  const fruit =
+  const fruit = f.fruitType === "cherry"
+    ? `<g stroke="#476633" stroke-width="3" fill="none"><path d="M112 224Q106 202 131 184Q132 208 139 231"/></g><g fill="#bc2546" stroke="#fff4dc" stroke-width="2"><circle cx="109" cy="232" r="20"/><circle cx="140" cy="239" r="21"/></g><path d="M102 220q-8 4-7 12M133 227q-8 4-7 12" stroke="#ffb7bf" stroke-width="3" fill="none"/>`
+    : f.fruitType === "watermelon"
+    ? `<path d="M101 188L159 253Q120 285 85 249Z" fill="#5c9d50" stroke="#fff4dc" stroke-width="2"/><path d="M101 193L151 250Q120 273 92 247Z" fill="#ffe7b7"/><path d="M101 198L145 248Q121 265 98 245Z" fill="#f25b72"/><g fill="#54262d"><ellipse cx="109" cy="227" rx="2" ry="4" transform="rotate(-20 109 227)"/><ellipse cx="125" cy="243" rx="2" ry="4" transform="rotate(-40 125 243)"/><ellipse cx="110" cy="247" rx="2" ry="3"/></g>`
+    :
     f.fruitType === "grape"
       ? `<g fill="${f.secondaryColor}" stroke="#fff4dc" stroke-width="2">${Array.from({ length: 7 }, (_, i) => `<circle cx="${105 + (i % 3) * 11}" cy="${195 + Math.floor(i / 3) * 15}" r="13"/>`).join("")}</g>`
       : `<ellipse cx="122" cy="232" rx="32" ry="49" fill="${f.accentColor}" stroke="#fff8d5" stroke-width="5"/>${Array.from({ length: 8 }, (_, i) => `<path d="M122 232l${Math.cos((i * Math.PI) / 4) * 28} ${Math.sin((i * Math.PI) / 4) * 44}" stroke="#fff8d5" stroke-width="3"/>`).join("")}`;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="330" viewBox="0 0 160 330"><defs><linearGradient id="metal"><stop stop-color="#68666a"/><stop offset=".18" stop-color="#f4eeeb"/><stop offset=".4" stop-color="#ada7a5"/><stop offset=".68" stop-color="#fff"/><stop offset="1" stop-color="#7d7578"/></linearGradient><linearGradient id="shine"><stop stop-color="#230012" stop-opacity=".35"/><stop offset=".23" stop-color="#fff" stop-opacity=".02"/><stop offset=".67" stop-color="#fff" stop-opacity=".04"/><stop offset=".84" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient><clipPath id="can"><path d="M32 17Q80 5 128 17L129 32Q142 45 142 58V283Q141 300 128 311Q80 327 32 311Q18 299 18 283V58Q18 43 31 32Z"/></clipPath></defs><path d="M32 17Q80 5 128 17L129 32Q142 45 142 58V283Q141 300 128 311Q80 327 32 311Q18 299 18 283V58Q18 43 31 32Z" fill="url(#metal)"/><g clip-path="url(#can)"><path d="M18 43H143V293H18Z" fill="${f.primaryColor}"/><path d="M112 39Q65 117 122 182Q157 239 88 299H157V40Z" fill="${f.secondaryColor}"/>${fruit}<text x="95" y="231" transform="rotate(-90 95 231)" fill="#fff8e9" font-family="Arial,sans-serif" font-size="61" font-weight="1000">FIZZA</text><text x="32" y="62" fill="#fff8e9" font-family="Arial" font-size="6" font-weight="bold">BRIGHTER DAYS AHEAD</text><text x="30" y="253" fill="#fff8e9" font-family="Arial" font-size="10" font-weight="bold">${f.name.split(" ")[0].toUpperCase()}</text><text x="30" y="266" fill="#fff8e9" font-family="Arial" font-size="10" font-weight="bold">${f.name.split(" ")[1].toUpperCase()}</text><text x="30" y="280" fill="#fff8e9" font-family="Arial" font-size="5">SPARKLING SODA • 355 mL</text><path d="M18 20H143V317H18Z" fill="url(#shine)"/>${Array.from({ length: 28 }, (_, i) => `<ellipse cx="${25 + ((i * 37) % 110)}" cy="${48 + ((i * 67) % 240)}" rx="${1 + (i % 3) * 0.6}" ry="${1.5 + (i % 3) * 0.8}" fill="#fff" opacity=".45"/>`).join("")}</g><ellipse cx="80" cy="17" rx="48" ry="9" fill="url(#metal)" stroke="#e8ded8" stroke-width="2"/><ellipse cx="80" cy="17" rx="40" ry="6" fill="#a29c9b"/><ellipse cx="81" cy="17" rx="13" ry="4" fill="none" stroke="#dedddd" stroke-width="3"/><path d="M32 309Q80 323 128 309" stroke="#e8dfd8" stroke-width="4" fill="none"/></svg>`;
   writeFileSync(`public/cans/${f.id}.svg`, svg);
-  writeFileSync(
-    `public/labels/${f.id}.svg`,
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"><rect width="1024" height="1024" fill="${f.primaryColor}"/><text x="512" y="500" text-anchor="middle" font-size="200" font-family="Arial" font-weight="900" fill="#fff8e9">FIZZA</text><text x="512" y="650" text-anchor="middle" font-size="65" font-family="Arial" fill="#fff8e9">${f.name}</text></svg>`,
-  );
+
 }

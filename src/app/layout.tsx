@@ -5,7 +5,12 @@ export const metadata: Metadata = {
   title: { default: "FIZZA — Soda, but way more fun.", template: "%s | FIZZA" },
   description:
     "Big flavor. Bright energy. Zero boring. Explore six delicious FIZZA sodas and build your own box of good days.",
-  metadataBase: new URL("https://fizzaverse-soda.mythkikiop.chatgpt.site"),
+  metadataBase: new URL(
+    process.env.SITE_URL ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000"),
+  ),
 };
 export default function RootLayout({
   children,

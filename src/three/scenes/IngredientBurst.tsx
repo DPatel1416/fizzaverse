@@ -9,12 +9,12 @@ import { cinematic } from "../cinematicState";
 import { BubbleMaterial } from "../particles/BubbleSystem";
 const smooth = MathUtils.smoothstep;
 const paths = [
-  { out: [-2.5, -1.1, 7.5], end: [-1.35, -.65, .8], size: .65 },
-  { out: [2.2, 1.4, 7], end: [1.5, 1.05, -.7], size: .57 },
-  { out: [-4.8, 2.1, 2], end: [-1.65, 1.05, -.6], size: .52 },
-  { out: [4.7, -2, 3], end: [1.6, -.9, .4], size: .58 },
-  { out: [.9, 3.4, -1.5], end: [.85, -1.7, -1], size: .36 },
-  { out: [-3.2, -3.1, -2], end: [-.8, -1.65, -1.5], size: .4 },
+  { out: [-2.5, -1.1, 7.5], end: [-1.65, -.6, .3], size: .52 },
+  { out: [2.2, 1.4, 7], end: [1.65, 1.15, -.5], size: .48 },
+  { out: [-4.8, 2.1, 2], end: [-1.65, 1.25, -.5], size: .46 },
+  { out: [4.7, -2, 3], end: [1.7, -.7, .3], size: .5 },
+  { out: [.9, 3.4, -1.5], end: [1, -2.05, -.8], size: .32 },
+  { out: [-3.2, -3.1, -2], end: [-.95, -2.05, -.8], size: .34 },
 ];
 function FlyingFruit({ flavor, index, mobile }: { flavor: Flavor; index: number; mobile: boolean }) {
   const ref = useRef<Group>(null);
@@ -30,13 +30,16 @@ function FlyingFruit({ flavor, index, mobile }: { flavor: Flavor; index: number;
     const cx = (cinematic.to.x - size.width / 2) * unit;
     const cy = (size.height / 2 - cinematic.to.y) * unit;
     const scale = cinematic.to.scale;
+    // Compensate for perspective so depth never pulls the settled fruit
+    // toward the screen center and into its neighbors as the page scrolls.
+    const depthScale = (10 - path.end[2]) / 10;
     g.position.set(
-      MathUtils.lerp(path.out[0] * blast * (mobile ? .32 : 1), cx + path.end[0] * scale, returnHome),
-      MathUtils.lerp(path.out[1] * blast * (mobile ? .55 : 1), cy + path.end[1] * scale * (mobile ? .7 : 1), returnHome) + Math.sin(clock.elapsedTime * .55 + index) * .06 * returnHome,
+      MathUtils.lerp(path.out[0] * blast * (mobile ? .32 : 1), (cx + path.end[0] * scale) * depthScale, returnHome),
+      MathUtils.lerp(path.out[1] * blast * (mobile ? .55 : 1), (cy + path.end[1] * scale * (mobile ? .85 : 1)) * depthScale, returnHome) + Math.sin(clock.elapsedTime * .55 + index) * .04 * returnHome,
       MathUtils.lerp(-3 + (path.out[2] + 3) * blast, path.end[2], returnHome),
     );
     const born = smooth(p, .416, .445);
-    g.scale.setScalar(born * MathUtils.lerp(.8, path.size * scale * (mobile ? .78 : 1), returnHome));
+    g.scale.setScalar(born * MathUtils.lerp(.8, path.size * scale * depthScale * (mobile ? .78 : 1), returnHome));
     g.rotation.set(0, 0, (index % 2 ? 1 : -1) * (.1 + blast * .7 * (1 - returnHome)) + Math.sin(clock.elapsedTime * .2 + index) * .04 * returnHome);
     defocus.current = Math.max(0, (g.position.z - 2.5) / 4.5) * (1 - returnHome);
   });

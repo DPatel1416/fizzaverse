@@ -3,13 +3,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Dialog } from "@/components/ui/Dialog";
-export function Footer() {
+import { FindUsSection } from "@/sections/FindUsSection";
+export function Footer({ includeLocator = false }: { includeLocator?: boolean }) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [info, setInfo] = useState("");
   return (
-    <footer className="footer">
+    <footer className={`footer${includeLocator ? " footer-with-locator" : ""}`}>
       <div className="footer-top">
+        {includeLocator && <FindUsSection />}
         <div className="newsletter">
           <span className="eyebrow">A LITTLE SOMETHING GOOD.</span>
           <h2>
@@ -46,6 +48,9 @@ export function Footer() {
             {message || "Fresh flavors. Happy news. The occasional good pun."}
           </p>
         </div>
+      </div>
+      <div className="footer-nav">
+        <Link href="/" className="footer-brand" aria-label="FIZZA home">FIZZA<span aria-hidden="true">✳</span></Link>
         <div className="footer-links">
           <div>
             <Link href="/shop">SHOP</Link>
@@ -65,11 +70,8 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="footer-wordmark" aria-hidden="true">
-        FIZZA<span>✳</span>
-      </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} FIZZA. BRIGHTER DAYS AHEAD.</span>
+        <span>© {new Date().getFullYear()} All rights reserved by Dhruvkumar Patel.</span>
         <span>A FICTIONAL SODA BRAND. MADE FOR GOOD VIBES.</span>
         <button onClick={() => setInfo("PRIVACY")}>PRIVACY</button>
       </div>

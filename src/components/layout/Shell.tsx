@@ -17,7 +17,6 @@ import { CanArt } from "@/components/ui/CanArt";
 import { Dialog } from "@/components/ui/Dialog";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Footer } from "./Footer";
-import { WebTools } from "./WebTools";
 const links = [
   ["SHOP", "/shop"],
   ["FLAVORS", "/#flavors"],
@@ -123,7 +122,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       {children}
-      <Footer />
+      <Footer includeLocator={pathname === "/"} />
       <CartDrawer />
       <Dialog
         open={panel === "search"}
@@ -224,7 +223,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </button>
         </nav>
       </Dialog>
-      <WebTools />
     </MotionConfig>
   );
 }

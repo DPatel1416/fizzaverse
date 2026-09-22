@@ -15,6 +15,7 @@ export function HeroSection() {
   const { index, select } = useFlavor();
   const flavor = flavors[index];
   const hero = useRef<HTMLElement>(null);
+  const plate = useRef<HTMLImageElement>(null);
   const progress = useRef(0);
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -50,6 +51,7 @@ export function HeroSection() {
           },
         });
         timeline.to(copy, { autoAlpha: 0, filter: "blur(12px)", duration: .17 }, .015)
+          .to(plate.current, { scale: 1.16, xPercent: -2, duration: .35 }, 0)
           .to(navigation, { autoAlpha: 0, filter: "blur(7px)", duration: .13 }, .035)
           .to(hero.current.querySelector(".world-hero"), { autoAlpha: 0, duration: .18 }, .1)
           .to(ticker, { autoAlpha: 0, duration: .12 }, .1)
@@ -65,6 +67,24 @@ export function HeroSection() {
         return () => {
           cinematic.progress = 0;
           cinematic.sectionShift = 0;
+        };
+      });
+      mm.add("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)", () => {
+        const element = hero.current;
+        if (!element || !plate.current) return;
+        const x = gsap.quickTo(plate.current, "x", { duration: 1.4, ease: "power3.out" });
+        const y = gsap.quickTo(plate.current, "y", { duration: 1.4, ease: "power3.out" });
+        const move = (event: PointerEvent) => {
+          if (cinematic.progress > .1) return;
+          x((event.clientX / innerWidth - .5) * -18);
+          y((event.clientY / innerHeight - .5) * -12);
+        };
+        const leave = () => { x(0); y(0); };
+        element.addEventListener("pointermove", move, { passive: true });
+        element.addEventListener("pointerleave", leave);
+        return () => {
+          element.removeEventListener("pointermove", move);
+          element.removeEventListener("pointerleave", leave);
         };
       });
     }, hero);
@@ -96,7 +116,7 @@ export function HeroSection() {
         } as React.CSSProperties
       }
     >
-      <div className="hero-sky"><img className="cinematic-plate" src="/images/cinematic-world.webp" alt="" width={1672} height={941} fetchPriority="high" /></div>
+      <div className="hero-sky"><img ref={plate} className="cinematic-plate" src="/images/fizz-sunny-picnic.webp" alt="" width={1672} height={941} fetchPriority="high" /></div>
       <div key={index} className="flavor-wipe" />
       <CanvasRoot flavor={flavor} progress={progress} />
       <div className="hero-vignette" />
@@ -115,7 +135,7 @@ export function HeroSection() {
           <Link className="button primary" href="/shop">
             SHOP THE FIZZ <MoveRight size={21} />
           </Link>
-          <a className="button outline" href="#flavors">
+          <a className="button button-outline" href="#flavors">
             EXPLORE FLAVORS <ArrowUpRight size={18} />
           </a>
         </div>

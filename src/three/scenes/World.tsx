@@ -15,9 +15,9 @@ import { FlavorEnvironment } from "../environments/FlavorEnvironment";
 import { BubbleSystem } from "../particles/BubbleSystem";
 import { useCanDrag } from "../useCanDrag";
 import { cinematic } from "../cinematicState";
-import { ChilledAtmosphere } from "./Atmosphere";
+import { FlavorLight } from "./Atmosphere";
 export function Studio() {
-  const photographicLight = useTexture("/images/cinematic-world.webp");
+  const photographicLight = useTexture("/images/fizz-sunny-picnic.webp");
   photographicLight.colorSpace = SRGBColorSpace;
   return (
     <>
@@ -46,6 +46,13 @@ export function Studio() {
           rotation={[Math.PI / 2, 0, 0]}
           scale={[8, 4, 1]}
           intensity={3}
+        />
+        <Lightformer
+          position={[-2.8, 1, 3]}
+          rotation={[0, Math.PI / 7, 0]}
+          scale={[.35, 5.5, 1]}
+          intensity={4}
+          color="#d7f3ff"
         />
         <Lightformer
           position={[0, -4, 3]}
@@ -209,13 +216,15 @@ export default function World({
             flavor={flavor}
             quality={quality}
             compact={mobile}
+            centered={mode === "product"}
             motionIntensity={reduced ? 0 : 1}
           />
           <BubbleSystem
-            count={qualityProfiles[quality].bubbles}
+            count={qualityProfiles[quality].bubbles * 3}
             reduced={reduced}
+            hero={mode === "hero"}
           />
-          <ChilledAtmosphere flavor={flavor} reduced={reduced} mobile={mobile} />
+          <FlavorLight flavor={flavor} reduced={reduced} />
         </PerformanceMonitor>
       </Suspense>
     </Canvas>

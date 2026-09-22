@@ -13,7 +13,7 @@ import { SceneBoundary } from "../CanvasRoot";
 import { CanArt } from "@/components/ui/CanArt";
 import { useCanDrag } from "../useCanDrag";
 import { cinematic } from "../cinematicState";
-import { ChilledAtmosphere, FlavorLight } from "./Atmosphere";
+import { FlavorLight } from "./Atmosphere";
 function SceneCanvas({
   children,
   camera = [0, 0, 10],
@@ -129,7 +129,7 @@ function ExplodedCan({
   });
   return (
     <>
-    <ChilledAtmosphere flavor={flavors[index]} reduced={reduced} ingredient mobile />
+    <FlavorLight flavor={flavors[index]} reduced={reduced} />
     <group
       ref={ref}
       rotation={[0.1, -0.35, -0.15]}
